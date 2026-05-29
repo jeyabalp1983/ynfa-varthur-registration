@@ -11,9 +11,26 @@
 <body>
 <div class="load" id="loading"><div class="spin"></div><p style="color:#ffd966;margin-top:1rem;font-weight:700">Processing...</p></div>
 <div class="main">
-    <div class="header"><div style="display:flex;align-items:center;gap:.8rem"><img class="hlogo" id="hlogo" src=""><span class="htitle">⚽ YNFA (VARTHUR)</span></div><div class="idbox" id="idDisplay">YNFAV000006</div></div>
+    <div class="header"><div style="display:flex;align-items:center;gap:.8rem"><img class="hlogo" id="hlogo" src=""><span class="htitle">⚽ YNFA (VARTHUR)</span></div><div class="idbox" id="idDisplay">YNFAV------</div></div>
     <div class="formbox"><div class="flogo"><img id="flogo" src=""></div><h2>📋 REGISTRATION & PAYMENT - 2026-27</h2>
-        <div class="ok" id="okMsg"><h3 style="color:#2e7d32">✅ REGISTRATION SUCCESSFUL!</h3><p>Student ID: <strong id="okId" style="color:#ff6f00;font-size:1.2rem"></strong></p><p id="quarterPaidMsg" style="color:#2e7d32;font-weight:600;"></p><p>📧 Confirmation email sent</p><p id="okContact" style="font-size:.85rem;color:#666"></p><button onclick="resetForm()" style="margin-top:1rem;padding:.5rem 2rem;border-radius:2rem;background:#ff6f00;color:#fff;border:0;cursor:pointer;font-weight:700">Register Another</button></div>
+        <div class="ok" id="okMsg">
+            <h3 style="color:#2e7d32">✅ REGISTRATION SUCCESSFUL!</h3>
+            <p>Student ID: <strong id="okId" style="color:#ff6f00;font-size:1.2rem"></strong></p>
+            <div id="receiptBox" style="background:#fff;border:2px solid #d4af37;border-radius:1rem;padding:1rem;margin-top:1rem;text-align:left;font-size:0.85rem;line-height:1.5;">
+                <strong>🧾 PAYMENT RECEIPT</strong><br>
+                <span id="entityName"></span><br>
+                GSTIN: <strong>29AWPPM2892M1ZI</strong><br>
+                Payment Centre: <strong id="centreNameDisplay"></strong><br>
+                <hr>
+                <div id="feeBreakup"></div>
+                <hr>
+                <strong>Total Paid: <span id="finalTotal" style="font-size:1.1rem;color:#ff6f00;"></span></strong><br>
+                <small style="color:#666;">All fees are inclusive of applicable GST (18% on coaching & registration, 5% on jersey)</small>
+            </div>
+            <p style="margin-top:0.5rem;">📧 Confirmation email with this receipt has been sent</p>
+            <p id="okContact" style="font-size:.85rem;color:#666"></p>
+            <button onclick="resetForm()" style="margin-top:1rem;padding:.5rem 2rem;border-radius:2rem;background:#ff6f00;color:#fff;border:0;cursor:pointer;font-weight:700">Register Another</button>
+        </div>
         <div class="check-section"><strong>🔍 Already Registered?</strong><p style="font-size:.8rem;margin:.3rem 0">Enter Email or Mobile</p><div class="r2"><div class="inp"><input type="email" id="checkEmail" placeholder="Email"></div><div class="inp"><input type="tel" id="checkMobile" placeholder="Mobile" pattern="[0-9]{10}"></div></div><button type="button" onclick="checkExisting()" style="background:#2196F3;color:#fff;border:0;padding:.5rem;border-radius:2rem;cursor:pointer;font-weight:600;margin-top:.5rem;width:100%">🔍 Find My Student ID</button><div id="checkResult" style="margin-top:.5rem"></div></div>
         <form id="form" onsubmit="return submitForm(event)" novalidate><div class="grid" id="formContent">
             <div class="inp"><label>🆔 Student ID</label><input type="text" id="sid" readonly style="background:#e8f5e9;font-weight:700;font-family:'Courier New',monospace"></div>
@@ -23,13 +40,21 @@
             <div class="r2"><div class="inp"><label>Mobile <span class="req">*</span></label><input type="tel" id="mobile" pattern="[0-9]{10}" required></div><div class="inp"><label>Email <span class="req">*</span></label><input type="email" id="email" required></div></div>
             <div class="inp"><label>Address <span class="req">*</span></label><textarea id="address" rows="2" required></textarea></div>
             <div style="background:#fff8e1;border-radius:1rem;padding:.8rem;border:2px solid #ff9800"><label style="display:flex;align-items:center;gap:.5rem;font-weight:700;color:#e65100"><input type="checkbox" id="hasSibling" onchange="toggleSibling()"> 👨‍👩‍👧‍👦 Sibling? (5% Discount)</label><div id="siblingSection" style="display:none;margin-top:.8rem"><div class="sibling-box"><div class="r2"><div class="inp"><label>Sibling Name <span class="req">*</span></label><input type="text" id="siblingName" placeholder="Enter sibling's full name"></div><div class="inp"><label>Sibling Age</label><input type="number" id="siblingAge" min="5" max="25" placeholder="Years"></div></div><div class="inp" style="margin-top:.3rem"><label>Existing Student ID (if already enrolled)</label><input type="text" id="siblingId" placeholder="e.g., YNFAV000XXX (optional)"></div></div><div class="sibling-discount">🎉 5% Sibling Discount Applied!</div></div></div>
-            <div style="display:flex;align-items:center;gap:1rem;background:#e6f0da;padding:.5rem 1rem;border-radius:2rem"><label style="margin:0"><input type="checkbox" id="oldStudent" onchange="updateAll()"> ⭐ Old Student</label><span id="regDisp" style="font-weight:700;margin-left:auto">Reg: ₹500</span></div>
+            <div style="display:flex;align-items:center;gap:1rem;background:#e6f0da;padding:.5rem 1rem;border-radius:2rem"><label style="margin:0"><input type="checkbox" id="oldStudent" onchange="updateAll()"> ⭐ Old Student (Reg. fee already paid – waiver)</label><span id="regDisp" style="font-weight:700;margin-left:auto">Reg: ₹500</span></div>
             <span class="sec">⚽ BATCH SELECTION</span>
             <div class="inp"><label>Batch <span class="req">*</span></label><select id="batchType" required onchange="updateAll()"><option value="">--</option><option value="batch1">Batch 1: Tue(6:30-8PM), Wed,Thu(5-6:30PM) ₹4,250</option><option value="batch2">Batch 2: Fri,Sat,Sun(5-6:30PM) ₹4,250</option><option value="pro">Pro: Wed-Sun/5 Days(8+Yrs) ₹47,500</option></select></div>
             <span class="sec">📅 QUARTER & DATES</span>
             <div class="inp"><label>Quarter <span class="req">*</span></label><select id="quarter" required onchange="updateAll()"><option value="">--</option><option value="Q1">Q1: Jun-Sep 2026</option><option value="Q2">Q2: Oct-Dec 2026</option><option value="Q3">Q3: Jan-Mar 2027</option><option value="full">Full Season 🔥5% OFF</option></select></div>
             <div class="r2"><div class="inp"><label>Start Date <span class="req">*</span></label><input type="date" id="startDate" required onchange="updateAll()"></div><div class="inp"><label>End Date</label><input type="text" id="endDate" readonly style="background:#f5f5f5;font-weight:600;color:#ff6f00"></div></div>
-            <div style="background:#f0f7e6;border-radius:1rem;padding:.8rem"><strong>👕 Jersey - Mandatory</strong><div id="jerseyNew"><div class="jm">✅ ₹1000 (Mandatory)</div></div><div id="jerseyOld" style="display:none"><label style="display:flex;align-items:center;gap:.5rem;margin-top:.3rem"><input type="checkbox" id="needJersey" onchange="updateAll()"> Need Jersey ₹1000</label><div class="jo">✅ Optional for old students</div></div><label style="display:flex;align-items:center;gap:.5rem;margin-top:.3rem"><input type="checkbox" id="extraJersey" onchange="updateAll()"> Extra pair +₹1000</label></div>
+            <div style="background:#f0f7e6;border-radius:1rem;padding:.8rem">
+                <strong>👕 Jersey - Mandatory</strong>
+                <div id="jerseyNew"><div class="jm">✅ Jersey Fee: ₹1000 (Mandatory)</div></div>
+                <div id="jerseyOld" style="display:none">
+                    <label style="display:flex;align-items:center;gap:.5rem;margin-top:.3rem"><input type="checkbox" id="needJersey" onchange="updateAll()" checked> I need Jersey - ₹1000</label>
+                    <div class="jo">✅ Old students: Jersey is optional if you already have one</div>
+                </div>
+                <label style="display:flex;align-items:center;gap:.5rem;margin-top:.3rem"><input type="checkbox" id="extraJersey" onchange="updateAll()"> Extra pair +₹1000</label>
+            </div>
             <div class="fee"><div><span>TOTAL:</span><strong id="grandTotal" style="font-size:1.3rem;color:#e65100">₹0</strong></div><div class="frow"><span>Coaching: <span id="coachingFee">₹0</span></span><span>Jersey: <span id="jerseyFee">₹0</span></span><span>Reg: <span id="regFee">₹500</span></span></div><div id="discountNote" style="font-size:.8rem;color:#1e4a2d"></div></div>
             <div class="payment-box"><h3>📱 Scan & Pay via UPI</h3><div class="qr-container" id="qrcode"></div><div id="upiLink"></div><p class="upi-id-text">UPI ID: 0798121A0079936.BQR@kotak</p></div>
             <span class="sec">💳 PAYMENT</span>
@@ -45,56 +70,134 @@
     </div>
 </div>
 <script>
-const SHEET_URL='https://script.google.com/macros/s/AKfycbwamlsmjG5JSw7Mn4xAeg-qfYn35jXh3tub9oL1TKoEWneJE5HFaFtYDkjEN3qMhuitog/exec';const UPI_ID='0798121A0079936.BQR@kotak';const ACADEMY_NAME='YNFA Varthur';const SIBLING_DISCOUNT=0.05;const PREFIX='YNFAV';
-const qd={Q1:{s:'2026-06-01',e:'2026-09-30',m:4},Q2:{s:'2026-10-01',e:'2026-12-31',m:3},Q3:{s:'2027-01-01',e:'2027-03-31',m:3}};const bf={batch1:4250,batch2:4250,pro:47500};const bd={batch1:'Batch 1: Tue(6:30-8PM), Wed,Thu(5-6:30PM)',batch2:'Batch 2: Fri,Sat,Sun(5-6:30PM)',pro:'Pro: Wed-Sun/5 Days(8+Yrs)'};
-const settings=JSON.parse(localStorage.getItem('ynfaVSettings')||'{}');const savedLogo=localStorage.getItem('ynfaVLogo');
+const SHEET_URL='https://script.google.com/macros/s/AKfycbwtzNYrhXJwvlINXnqHvNxthG2KNwex4M46wW2pcpb-Yl756dGqegUN7c18LwGlXmaALA/exec';
+const UPI_ID='0798121A0079936.BQR@kotak';
+const ACADEMY_NAME='YNFA Varthur';
+const SIBLING_DISCOUNT=0.05;
+const centre='ynfav';
+const qd={Q1:{s:'2026-06-01',e:'2026-09-30',m:4},Q2:{s:'2026-10-01',e:'2026-12-31',m:3},Q3:{s:'2027-01-01',e:'2027-03-31',m:3}};
+const bf={batch1:4250,batch2:4250,pro:47500};
+const bd={batch1:'Batch 1: Tue(6:30-8PM), Wed,Thu(5-6:30PM)',batch2:'Batch 2: Fri,Sat,Sun(5-6:30PM)',pro:'Pro: Wed-Sun/5 Days(8+Yrs)'};
+const settings=JSON.parse(localStorage.getItem('ynfaVSettings')||'{}');
+const savedLogo=localStorage.getItem('ynfaVLogo');
 if(savedLogo){document.getElementById('hlogo').src=savedLogo;document.getElementById('hlogo').classList.add('show');document.getElementById('flogo').src=savedLogo;document.getElementById('flogo').classList.add('show')}
 document.getElementById('okContact').textContent='📞 '+(settings.phone||'+91-9606743437')+' | 📧 '+(settings.email||'ynsportsforexcellence@gmail.com');
-function getStudents(){return JSON.parse(localStorage.getItem('ynfaVStudents')||'{}')}
-function saveStudent(id,email,mobile,name){const s=getStudents();s[id]={email,mobile,name};localStorage.setItem('ynfaVStudents',JSON.stringify(s))}
-function findStudent(email,mobile){const s=getStudents();for(const[id,d]of Object.entries(s)){if(d.email===email||d.mobile===mobile)return{id,...d}}return null}
-function genId(){const s=getStudents();const ids=Object.keys(s).map(i=>parseInt(i.replace(PREFIX,'')));let n=6;while(ids.includes(n))n++;return PREFIX+String(n).padStart(6,'0')}
-function getPaidQuarters(sid){const p=JSON.parse(localStorage.getItem('ynfaVPayments')||'{}');return p[sid]||[]}
-function savePayment(sid,q){const p=JSON.parse(localStorage.getItem('ynfaVPayments')||'{}');if(!p[sid])p[sid]=[];if(!p[sid].includes(q))p[sid].push(q);localStorage.setItem('ynfaVPayments',JSON.stringify(p))}
-function checkExisting(){const e=document.getElementById('checkEmail').value.trim(),m=document.getElementById('checkMobile').value.trim();const r=document.getElementById('checkResult'),qs=document.getElementById('quarter');if(!e&&!m)return;const f=findStudent(e,m);const allOpts=qs.options;for(let i=0;i<allOpts.length;i++){allOpts[i].disabled=false;allOpts[i].style.textDecoration=''}if(f){const pq=getPaidQuarters(f.id);let qm='';if(pq.includes('full')){qm='✅ Full season paid!';for(let i=1;i<allOpts.length;i++)allOpts[i].disabled=true}else if(pq.length>0){const pl=pq.join(', ');qm='📌 Paid: '+pl+'<br>';if(pq.includes('Q1')){allOpts[1].disabled=true;allOpts[1].style.textDecoration='line-through'}if(pq.includes('Q2')){allOpts[2].disabled=true;allOpts[2].style.textDecoration='line-through'}if(pq.includes('Q3')){allOpts[3].disabled=true;allOpts[3].style.textDecoration='line-through'}const rem=[];if(!pq.includes('Q1'))rem.push('Q1');if(!pq.includes('Q2'))rem.push('Q2');if(!pq.includes('Q3'))rem.push('Q3');qm+='🟢 Available: '+rem.join(', ')}else{qm='🆕 Select any quarter.'}r.innerHTML='<div class="existing-msg">✅ Found! ID: <strong>'+f.id+'</strong><br>👤 '+f.name+'<br>'+qm+'</div>';document.getElementById('sid').value=f.id;document.getElementById('idDisplay').textContent=f.id;document.getElementById('sname').value=f.name||'';cid=f.id;isEx=true}else{r.innerHTML='<p style="color:#ff9800">🆕 New Student</p>';cid=genId();document.getElementById('sid').value=cid;document.getElementById('idDisplay').textContent=cid;isEx=false}updateAll()}
-let cid=genId(),isEx=false;document.getElementById('sid').value=cid;document.getElementById('idDisplay').textContent=cid;
-function toggleSibling(){document.getElementById('siblingSection').style.display=document.getElementById('hasSibling').checked?'block':'none';updateAll()}
-function cf(q,b,sd,hs){if(!q||!b||!sd)return{f:0,e:''};if(b==='pro'){let f=bf.pro;if(hs)f=Math.round(f*(1-SIBLING_DISCOUNT));return{f,e:'2027-03-31'}}const m=bf[b]||4250;if(q==='full'){let f=Math.round(((m*4)+(m*3)+(m*3))*.95);if(hs)f=Math.round(f*(1-SIBLING_DISCOUNT));return{f,e:'2027-03-31'}}const x=qd[q];if(!x)return{f:0,e:''};const qs=new Date(x.s),qe=new Date(x.e),jd=new Date(sd);if(jd>qe)return{f:0,e:''};if(jd<=qs){let f=m*x.m;if(hs)f=Math.round(f*(1-SIBLING_DISCOUNT));return{f,e:x.e}}const rem=Math.ceil((qe-jd)/86400000),tot=Math.ceil((qe-qs)/86400000);let f=Math.round((m*x.m)*(rem/tot)/100)*100;if(hs)f=Math.round(f*(1-SIBLING_DISCOUNT));return{f,e:x.e}}
-function genQR(am,qt){const qr=document.getElementById('qrcode'),ul=document.getElementById('upiLink');const u='upi://pay?pa='+encodeURIComponent(UPI_ID)+'&pn='+encodeURIComponent(ACADEMY_NAME)+'&am='+am+'&cu=INR&tn='+encodeURIComponent('YNFA '+qt);qr.innerHTML='';ul.innerHTML='';if(am>0){const qi='https://api.qrserver.com/v1/create-qr-code/?size=250x250&color=1a237e&bgcolor=FFFFFF&data='+encodeURIComponent(u);const img=document.createElement('img');img.src=qi;img.width=220;img.height=220;img.style.borderRadius='8px';qr.appendChild(img);const a=document.createElement('a');a.href=u;a.className='upi-link-btn';a.textContent='📱 Pay ₹'+am.toLocaleString('en-IN');ul.appendChild(a)}}
-function updateAll(){const q=document.getElementById('quarter').value,b=document.getElementById('batchType').value,sd=document.getElementById('startDate').value;const os=document.getElementById('oldStudent').checked,ej=document.getElementById('extraJersey').checked;const hs=document.getElementById('hasSibling').checked,jo=settings.oldJerseyOptional!==false;const r=cf(q,b,sd,hs);const nj=os&&jo?document.getElementById('needJersey').checked:true;const jt=!nj?0:(ej?2000:1000);const rf=os?0:500;const gt=r.f+jt+rf;document.getElementById('coachingFee').textContent='₹'+r.f.toLocaleString('en-IN');document.getElementById('jerseyFee').textContent='₹'+jt;document.getElementById('regFee').textContent='₹'+rf;document.getElementById('grandTotal').textContent='₹'+gt.toLocaleString('en-IN');document.getElementById('regDisp').textContent='Reg: ₹'+rf;document.getElementById('endDate').value=r.e?new Date(r.e).toLocaleDateString('en-IN',{year:'numeric',month:'long',day:'numeric'}):'';document.getElementById('discountNote').innerHTML=q==='full'?'✅ 5% Discount!':'';genQR(gt,q==='full'?'Full Season':(qd[q]?qd[q].s+' to '+qd[q].e:''))}
-function previewReceipt(e){e.stopPropagation();const f=e.target.files[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)){alert('JPG/PNG/WebP!');return}if(f.size>10*1024*1024){alert('Max 10MB!');return}const r=new FileReader();r.onload=function(ev){document.getElementById('receiptImg').src=ev.target.result;document.getElementById('receiptName').textContent='✅ '+f.name;document.getElementById('receiptPreview').style.display='block';document.getElementById('uploadPH').style.display='none'};r.readAsDataURL(f)}
-function removeReceipt(){document.getElementById('receipt').value='';document.getElementById('receiptPreview').style.display='none';document.getElementById('uploadPH').style.display='block'}
-async function submitForm(e){
-    e.preventDefault();
-    if(!document.getElementById('consent').checked){alert('Agree to terms');return false}
-    const hs=document.getElementById('hasSibling').checked;
-    if(hs&&!document.getElementById('siblingName').value.trim()){alert('Enter sibling name');return false}
-    const email=document.getElementById('email').value.trim(),mobile=document.getElementById('mobile').value.trim();
-    // FIX: Skip duplicate check if sibling is checked
-    if(!isEx && !hs && findStudent(email,mobile)){alert('Already registered! Use Find My ID or check Sibling box');return false}
-    if(hs){
-        const sibId=document.getElementById('siblingId').value.trim();
-        if(sibId){
-            const allStudents=getStudents();
-            if(!allStudents[sibId]){alert('Invalid Sibling ID.');return false}
-        }
+document.getElementById('sid').value='---';document.getElementById('idDisplay').textContent='YNFAV------';
+
+function countBatchDaysInMonth(year, month, batch, fromDate = null) {
+    const dayMap = { batch1: [2,3,4], batch2: [5,6,0], pro: [3,4,5,6,0] };
+    const days = dayMap[batch] || dayMap.batch1;
+    let count = 0;
+    const startDay = fromDate ? fromDate.getDate() : 1;
+    const date = new Date(year, month, startDay);
+    const lastDay = new Date(year, month + 1, 0).getDate();
+    for (let d = startDay; d <= lastDay; d++) {
+        date.setDate(d);
+        if (days.includes(date.getDay())) count++;
     }
-    const q=document.getElementById('quarter').value;if(!q)return false;
-    document.getElementById('loading').classList.add('on');
-    const os=document.getElementById('oldStudent').checked,jo=settings.oldJerseyOptional!==false;
-    const nj=os&&jo?document.getElementById('needJersey').checked:true;
-    const b=document.getElementById('batchType').value,sd=document.getElementById('startDate').value;
-    const r=cf(q,b,sd,hs);const jt=!nj?0:(document.getElementById('extraJersey').checked?2000:1000);
-    const rf=os?0:500,gt=r.f+jt+rf;
-    saveStudent(cid,email,mobile,document.getElementById('sname').value.trim());
-    if(q==='full'){savePayment(cid,'Q1');savePayment(cid,'Q2');savePayment(cid,'Q3');savePayment(cid,'full')}else{savePayment(cid,q)}
-    const paidQ=getPaidQuarters(cid);
-    const data={studentId:cid,studentName:document.getElementById('sname').value,parentName:document.getElementById('pname').value,age:document.getElementById('age').value,dob:document.getElementById('dob').value,gender:document.getElementById('gender').value,mobile,email,address:document.getElementById('address').value,hasSibling:hs,siblingName:hs?document.getElementById('siblingName').value:'',siblingAge:hs?document.getElementById('siblingAge').value:'',siblingId:hs?document.getElementById('siblingId').value:'',siblingDiscount:hs?'5%':'None',oldStudent:os,quarter:q,batch:bd[b]||b,startDate:sd,endDate:r.e,coachingFee:r.f,jerseyFee:jt,regFee:rf,totalFee:gt,paymentMode:document.getElementById('paymentMode').value,paidDate:document.getElementById('paidDate').value,receiptFileName:document.getElementById('receipt').files[0]?.name||'N/A',transactionId:document.getElementById('txnId').value||'N/A',paidQuarters:paidQ.join(', ')};
-    try{await fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})}catch(err){}
-    setTimeout(()=>{document.getElementById('loading').classList.remove('on');document.getElementById('formContent').style.display='none';document.getElementById('okMsg').classList.add('show');document.getElementById('okId').textContent=cid},1500);return false
+    return count;
 }
-function resetForm(){document.getElementById('form').reset();document.getElementById('formContent').style.display='flex';document.getElementById('okMsg').classList.remove('show');document.getElementById('siblingSection').style.display='none';removeReceipt();const qs=document.getElementById('quarter');for(let i=0;i<qs.options.length;i++){qs.options[i].disabled=false;qs.options[i].style.textDecoration=''}cid=genId();isEx=false;document.getElementById('sid').value=cid;document.getElementById('idDisplay').textContent=cid;updateAll();document.getElementById('paidDate').value=new Date().toISOString().split('T')[0]}
-window.onload=function(){document.getElementById('paidDate').value=new Date().toISOString().split('T')[0];document.getElementById('dob').max=new Date().toISOString().split('T')[0];updateAll()};
+
+function cf(q, b, sd, hs) {
+    if (!q || !b || !sd) return { f: 0, e: '' };
+    const m = bf[b] || 4250;
+    if (b === 'pro') {
+        let f = bf.pro;
+        if (hs) f = Math.round(f * (1 - SIBLING_DISCOUNT));
+        return { f, e: '2027-03-31' };
+    }
+    if (q === 'full') {
+        let f = Math.round(((m * 4) + (m * 3) + (m * 3)) * 0.95);
+        if (hs) f = Math.round(f * (1 - SIBLING_DISCOUNT));
+        return { f, e: '2027-03-31' };
+    }
+    const x = qd[q];
+    if (!x) return { f: 0, e: '' };
+    const qs = new Date(x.s);
+    const qe = new Date(x.e);
+    const jd = new Date(sd);
+    if (jd > qe) return { f: 0, e: '' };
+
+    const graceEnd = new Date(qs);
+    graceEnd.setDate(graceEnd.getDate() + 7);
+    if (jd <= graceEnd) {
+        let f = m * x.m;
+        if (hs) f = Math.round(f * (1 - SIBLING_DISCOUNT));
+        return { f, e: x.e };
+    }
+
+    let totalFee = 0;
+    let current = new Date(jd.getFullYear(), jd.getMonth(), 1);
+    while (current <= qe) {
+        const monthStart = new Date(current.getFullYear(), current.getMonth(), 1);
+        const monthEnd = new Date(current.getFullYear(), current.getMonth() + 1, 0);
+        let effectiveStart = jd > monthStart ? jd : monthStart;
+        if (effectiveStart > monthEnd) {
+            current.setMonth(current.getMonth() + 1);
+            continue;
+        }
+        const totalMonthDays = countBatchDaysInMonth(current.getFullYear(), current.getMonth(), b);
+        if (totalMonthDays === 0) {
+            current.setMonth(current.getMonth() + 1);
+            continue;
+        }
+        if (jd.getDate() === 1 && jd.getMonth() === current.getMonth() && jd.getFullYear() === current.getFullYear()) {
+            totalFee += m;
+        } else if (effectiveStart.getDate() === 1) {
+            totalFee += m;
+        } else {
+            const remainingDays = countBatchDaysInMonth(current.getFullYear(), current.getMonth(), b, effectiveStart);
+            const ratio = remainingDays / totalMonthDays;
+            totalFee += Math.round(m * ratio / 100) * 100;
+        }
+        current.setMonth(current.getMonth() + 1);
+    }
+
+    let f = totalFee;
+    if (hs) f = Math.round(f * (1 - SIBLING_DISCOUNT));
+    return { f, e: x.e };
+}
+
+function genQR(am,qt){const qr=document.getElementById('qrcode'),ul=document.getElementById('upiLink');const u='upi://pay?pa='+encodeURIComponent(UPI_ID)+'&pn='+encodeURIComponent(ACADEMY_NAME)+'&am='+am+'&cu=INR&tn='+encodeURIComponent('YNFA '+qt);qr.innerHTML='';ul.innerHTML='';if(am>0){const qi='https://api.qrserver.com/v1/create-qr-code/?size=250x250&color=1a237e&bgcolor=FFFFFF&data='+encodeURIComponent(u);const img=document.createElement('img');img.src=qi;img.width=220;img.height=220;img.style.borderRadius='8px';qr.appendChild(img);const a=document.createElement('a');a.href=u;a.className='upi-link-btn';a.textContent='📱 Pay ₹'+am.toLocaleString('en-IN');ul.appendChild(a);}}
+function updateAll(){
+    const q=document.getElementById('quarter').value,b=document.getElementById('batchType').value,sd=document.getElementById('startDate').value;
+    const os=document.getElementById('oldStudent').checked,ej=document.getElementById('extraJersey').checked;
+    const hs=document.getElementById('hasSibling').checked,jo=settings.oldJerseyOptional!==false;
+    if(os&&jo){document.getElementById('jerseyNew').style.display='none';document.getElementById('jerseyOld').style.display='block';}
+    else{document.getElementById('jerseyNew').style.display='block';document.getElementById('jerseyOld').style.display='none';document.getElementById('needJersey').checked=true;}
+    const r=cf(q,b,sd,hs);const needJ=(os&&jo)?document.getElementById('needJersey').checked:true;
+    const jt=!needJ?0:(ej?2000:1000);const rf=os?0:500;const gt=r.f+jt+rf;
+    document.getElementById('coachingFee').textContent='₹'+r.f.toLocaleString('en-IN');document.getElementById('jerseyFee').textContent='₹'+jt;document.getElementById('regFee').textContent='₹'+rf;
+    document.getElementById('grandTotal').textContent='₹'+gt.toLocaleString('en-IN');document.getElementById('regDisp').textContent='Reg: ₹'+rf;
+    document.getElementById('endDate').value=r.e?new Date(r.e).toLocaleDateString('en-IN',{year:'numeric',month:'long',day:'numeric'}):'';
+    document.getElementById('discountNote').innerHTML=q==='full'?'✅ 5% Season Discount!':(b==='pro'?'💼 Pro Batch':'');
+    genQR(gt,q==='full'?'Full Season':(qd[q]?qd[q].s+' to '+qd[q].e:''));
+}
+function previewReceipt(e){e.stopPropagation();const f=e.target.files[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)){alert('JPG/PNG/WebP!');return}if(f.size>10*1024*1024){alert('Max 10MB!');return}const r=new FileReader();r.onload=function(ev){document.getElementById('receiptImg').src=ev.target.result;document.getElementById('receiptName').textContent='✅ '+f.name;document.getElementById('receiptPreview').style.display='block';document.getElementById('uploadPH').style.display='none';};r.readAsDataURL(f);}
+function removeReceipt(){document.getElementById('receipt').value='';document.getElementById('receiptPreview').style.display='none';document.getElementById('uploadPH').style.display='block';}
+async function submitForm(e){
+    e.preventDefault();if(!document.getElementById('consent').checked){alert('Agree to terms');return false;}
+    const hs=document.getElementById('hasSibling').checked;if(hs&&!document.getElementById('siblingName').value.trim()){alert('Enter sibling name');return false;}
+    const q=document.getElementById('quarter').value;if(!q)return false;document.getElementById('loading').classList.add('on');
+    const os=document.getElementById('oldStudent').checked,jo=settings.oldJerseyOptional!==false;
+    const needJ=(os&&jo)?document.getElementById('needJersey').checked:true;
+    const b=document.getElementById('batchType').value,sd=document.getElementById('startDate').value;
+    const r=cf(q,b,sd,hs);const jt=!needJ?0:(document.getElementById('extraJersey').checked?2000:1000);const rf=os?0:500,gt=r.f+jt+rf;
+    const payload={studentName:document.getElementById('sname').value,parentName:document.getElementById('pname').value,age:document.getElementById('age').value,dob:document.getElementById('dob').value,gender:document.getElementById('gender').value,mobile:document.getElementById('mobile').value,email:document.getElementById('email').value,address:document.getElementById('address').value,hasSibling:hs,siblingName:hs?document.getElementById('siblingName').value:'',siblingAge:hs?document.getElementById('siblingAge').value:'',siblingId:hs?document.getElementById('siblingId').value:'',siblingDiscount:hs?'5%':'None',oldStudent:os,quarter:q,planDetail:q==='full'?'Full Season':(qd[q]?.s+' to '+qd[q]?.e),batch:bd[b]||b,startDate:sd,endDate:r.e,coachingFee:r.f,jerseyFee:jt,regFee:rf,totalFee:gt,paymentMode:document.getElementById('paymentMode').value,paidDate:document.getElementById('paidDate').value,receiptFileName:document.getElementById('receipt').files[0]?.name||'N/A',transactionId:document.getElementById('txnId').value||'N/A',experience:document.getElementById('experience').value,playingStyle:document.getElementById('playingStyle').value,medical:document.getElementById('medical').value||'None'};
+    try{
+        const resp=await fetch(SHEET_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+        const result=await resp.json();
+        if(result.status==='success'){
+            document.getElementById('loading').classList.remove('on');document.getElementById('formContent').style.display='none';document.getElementById('okMsg').classList.add('show');document.getElementById('okId').textContent=result.studentId;
+            document.getElementById('entityName').innerHTML='<strong>YN Sports for Excellence</strong><br>(Subsidary of WoW Fashion & Sports)';document.getElementById('centreNameDisplay').textContent=ACADEMY_NAME;
+            document.getElementById('feeBreakup').innerHTML=`Coaching Fee (incl. 18% GST): ₹${r.f.toLocaleString('en-IN')}<br>`+(hs?`Sibling Discount (5%): -₹${Math.round(r.f*0.05).toLocaleString('en-IN')}<br>`:'')+(q==='full'?`Season Discount (5%): -₹${Math.round(r.f*0.05).toLocaleString('en-IN')}<br>`:'')+`Jersey Fee (incl. 5% GST): ₹${jt.toLocaleString('en-IN')}<br>`+`Registration Fee (incl. 18% GST): ₹${rf.toLocaleString('en-IN')}`;
+            document.getElementById('finalTotal').textContent='₹'+gt.toLocaleString('en-IN');
+        }else{alert('Submission failed.');}
+    }catch(err){alert('Network error.');}
+    document.getElementById('loading').classList.remove('on');return false;
+}
+function resetForm(){document.getElementById('form').reset();document.getElementById('formContent').style.display='flex';document.getElementById('okMsg').classList.remove('show');document.getElementById('siblingSection').style.display='none';removeReceipt();document.getElementById('sid').value='---';document.getElementById('idDisplay').textContent='YNFAV------';updateAll();document.getElementById('paidDate').value=new Date().toISOString().split('T')[0];}
+window.onload=function(){document.getElementById('paidDate').value=new Date().toISOString().split('T')[0];document.getElementById('dob').max=new Date().toISOString().split('T')[0];updateAll();};
 ['quarter','batchType'].forEach(id=>document.getElementById(id).addEventListener('change',updateAll));document.getElementById('startDate').addEventListener('change',updateAll);document.getElementById('oldStudent').addEventListener('change',updateAll);document.getElementById('extraJersey').addEventListener('change',updateAll);document.getElementById('needJersey').addEventListener('change',updateAll);
 </script>
 </body>
