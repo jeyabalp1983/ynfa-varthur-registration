@@ -58,9 +58,9 @@
             <div class="fee"><div><span>TOTAL:</span><strong id="grandTotal" style="font-size:1.3rem;color:#e65100">₹0</strong></div><div class="frow"><span>Coaching: <span id="coachingFee">₹0</span></span><span>Jersey: <span id="jerseyFee">₹0</span></span><span>Reg: <span id="regFee">₹500</span></span></div><div id="discountNote" style="font-size:.8rem;color:#1e4a2d"></div></div>
             <div class="payment-box"><h3>📱 Scan & Pay via UPI</h3><div class="qr-container" id="qrcode"></div><div id="upiLink"></div><p class="upi-id-text">UPI ID: 0798121A0079936.BQR@kotak</p></div>
             <span class="sec">💳 PAYMENT</span>
-            <div class="r2"><div class="inp"><label>Mode <span class="req">*</span></label><select id="paymentMode" required><option value="">--</option><option value="UPI">UPI</option><option value="Cash">Cash</option></select></div><div class="inp"><label>Date <span class="req">*</span></label><input type="date" id="paidDate" required></div></div>
-            <div class="inp"><label>Screenshot <span class="req">*</span></label><div class="upbox" id="uploadArea" onclick="document.getElementById('receipt').click()"><div id="uploadPH"><span style="font-size:3rem">📷</span><p>Click to Upload</p><button type="button" style="background:#25D366;color:#fff;border:0;padding:.5rem 1.5rem;border-radius:2rem;cursor:pointer;font-weight:600;margin-top:.5rem">📱 Choose</button></div><input type="file" id="receipt" accept="image/*" capture="environment" style="display:none" onchange="previewReceipt(event)"><div class="prev" id="receiptPreview"><img id="receiptImg" src=""><p id="receiptName"></p><button type="button" onclick="event.stopPropagation();document.getElementById('receipt').click()" style="background:#d4af37;color:#0a2f1f;border:0;padding:.3rem .8rem;border-radius:1.5rem;cursor:pointer;font-weight:600;font-size:.75rem">🔄</button> <button type="button" onclick="event.stopPropagation();removeReceipt()" style="background:#c41e3a;color:#fff;border:0;padding:.3rem .8rem;border-radius:1.5rem;cursor:pointer;font-weight:600;font-size:.75rem">✕</button></div></div></div>
-            <div class="inp"><label>Transaction ID</label><input type="text" id="txnId"></div>
+            <div class="r2"><div class="inp"><label>Mode <span class="req">*</span></label><select id="paymentMode" required onchange="togglePaymentFields()"><option value="">--</option><option value="UPI">UPI</option><option value="Cash">Cash</option></select></div><div class="inp"><label>Date <span class="req">*</span></label><input type="date" id="paidDate" required></div></div>
+            <div class="inp" id="receiptField"><label>Screenshot <span class="req" id="receiptReq">*</span></label><div class="upbox" id="uploadArea" onclick="document.getElementById('receipt').click()"><div id="uploadPH"><span style="font-size:3rem">📷</span><p>Click to Upload</p><button type="button" style="background:#25D366;color:#fff;border:0;padding:.5rem 1.5rem;border-radius:2rem;cursor:pointer;font-weight:600;margin-top:.5rem">📱 Choose</button></div><input type="file" id="receipt" accept="image/*" capture="environment" style="display:none" onchange="previewReceipt(event)"><div class="prev" id="receiptPreview"><img id="receiptImg" src=""><p id="receiptName"></p><button type="button" onclick="event.stopPropagation();document.getElementById('receipt').click()" style="background:#d4af37;color:#0a2f1f;border:0;padding:.3rem .8rem;border-radius:1.5rem;cursor:pointer;font-weight:600;font-size:.75rem">🔄</button> <button type="button" onclick="event.stopPropagation();removeReceipt()" style="background:#c41e3a;color:#fff;border:0;padding:.3rem .8rem;border-radius:1.5rem;cursor:pointer;font-weight:600;font-size:.75rem">✕</button></div></div></div>
+            <div class="inp" id="txnField"><label>Transaction ID <span class="req" id="txnReq">*</span></label><input type="text" id="txnId"></div>
             <span class="sec">⚽ TRAINING</span>
             <div class="r2"><div class="inp"><label>Experience</label><select id="experience"><option value="">--</option><option value="beginner">Beginner</option><option value="school">School</option><option value="club">Club</option><option value="district">District</option></select></div><div class="inp"><label>Playing Position</label><input type="text" id="playingStyle" placeholder="Forward, Midfielder, Defender"></div></div>
             <div class="inp"><label>Medical</label><input type="text" id="medical"></div>
@@ -70,23 +70,48 @@
     </div>
 </div>
 <script>
-const SHEET_URL='https://script.google.com/macros/s/AKfycbz3_MS6Ybx19fDH1u50biJ2gvrXGBBNYK9Gj7y_90ukGpPBfOV9d_e9zvDvA7-2W8x4OA/exec';
-const UPI_ID='0798121A0079936.BQR@kotak';
-const ACADEMY_NAME='YNFA Varthur';
-const SIBLING_DISCOUNT=0.05;
-const centre='ynfav';
-const qd={Q1:{s:'2026-06-01',e:'2026-09-30',m:4},Q2:{s:'2026-10-01',e:'2026-12-31',m:3},Q3:{s:'2027-01-01',e:'2027-03-31',m:3}};
-const bf={batch1:4250,batch2:4250,pro:47500};
-const bd={batch1:'Batch 1: Tue(6:30-8PM), Wed,Thu(5-6:30PM)',batch2:'Batch 2: Fri,Sat,Sun(5-6:30PM)',pro:'Pro: Wed-Sun/5 Days(8+Yrs)'};
-const settings=JSON.parse(localStorage.getItem('ynfaVSettings')||'{}');
-const savedLogo=localStorage.getItem('ynfaVLogo');
-if(savedLogo){document.getElementById('hlogo').src=savedLogo;document.getElementById('hlogo').classList.add('show');document.getElementById('flogo').src=savedLogo;document.getElementById('flogo').classList.add('show')}
-document.getElementById('okContact').textContent='📞 '+(settings.phone||'+91-9606743437')+' | 📧 '+(settings.email||'ynsportsforexcellence@gmail.com');
-document.getElementById('sid').value='---';
-document.getElementById('idDisplay').textContent='YNFAV------';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwZQjpc87npzZMxGP74Ly8QsmaKEYTYGt4hppN8YcP_8BoScKU--nilw7_TlLb2jgFoMQ/exec'; 
+const UPI_ID = '0798121A0079936.BQR@kotak';
+const ACADEMY_NAME = 'YNFA Varthur';
+const SIBLING_DISCOUNT = 0.05;
+const qd = { Q1: { s: '2026-06-01', e: '2026-09-30', m: 4 }, Q2: { s: '2026-10-01', e: '2026-12-31', m: 3 }, Q3: { s: '2027-01-01', e: '2027-03-31', m: 3 } };
+const bf = { batch1: 4250, batch2: 4250, pro: 47500 };
+const bd = { batch1: 'Batch 1: Tue(6:30-8PM), Wed,Thu(5-6:30PM)', batch2: 'Batch 2: Fri,Sat,Sun(5-6:30PM)', pro: 'Pro: Wed-Sun/5 Days(8+Yrs)' };
+const settings = JSON.parse(localStorage.getItem('ynfaVSettings') || '{}');
+const savedLogo = localStorage.getItem('ynfaVLogo');
+if (savedLogo) { document.getElementById('hlogo').src = savedLogo; document.getElementById('hlogo').classList.add('show'); document.getElementById('flogo').src = savedLogo; document.getElementById('flogo').classList.add('show'); }
+document.getElementById('okContact').textContent = '📞 ' + (settings.phone || '+91-9606743437') + ' | 📧 ' + (settings.email || 'ynsportsforexcellence@gmail.com');
+document.getElementById('sid').value = '---';
+document.getElementById('idDisplay').textContent = 'YNFAV------';
+
+function togglePaymentFields() {
+    const mode = document.getElementById('paymentMode').value;
+    const receiptField = document.getElementById('receiptField');
+    const txnField = document.getElementById('txnField');
+    const receiptReq = document.getElementById('receiptReq');
+    const txnReq = document.getElementById('txnReq');
+    if (mode === 'Cash') {
+        receiptField.style.display = 'none';
+        txnField.style.display = 'none';
+        receiptReq.style.display = 'none';
+        txnReq.style.display = 'none';
+        removeReceipt();
+    } else {
+        receiptField.style.display = 'block';
+        txnField.style.display = 'block';
+        receiptReq.style.display = 'inline';
+        txnReq.style.display = 'inline';
+    }
+}
+
+function toggleSibling() {
+    const siblingSection = document.getElementById('siblingSection');
+    siblingSection.style.display = document.getElementById('hasSibling').checked ? 'block' : 'none';
+    updateAll();
+}
 
 function countBatchDaysInMonth(year, month, batch, fromDate = null) {
-    const dayMap = { batch1: [2,3,4], batch2: [5,6,0], pro: [3,4,5,6,0] };
+    const dayMap = { batch1: [2, 3, 4], batch2: [5, 6, 0], pro: [3, 4, 5, 6, 0] };
     const days = dayMap[batch] || dayMap.batch1;
     let count = 0;
     const startDay = fromDate ? fromDate.getDate() : 1;
@@ -118,7 +143,6 @@ function cf(q, b, sd, hs) {
     const qe = new Date(x.e);
     const jd = new Date(sd);
     if (jd > qe) return { f: 0, e: '' };
-
     const graceEnd = new Date(qs);
     graceEnd.setDate(graceEnd.getDate() + 7);
     if (jd <= graceEnd) {
@@ -126,7 +150,6 @@ function cf(q, b, sd, hs) {
         if (hs) f = Math.round(f * (1 - SIBLING_DISCOUNT));
         return { f, e: x.e };
     }
-
     let totalFee = 0;
     let current = new Date(jd.getFullYear(), jd.getMonth(), 1);
     while (current <= qe) {
@@ -153,55 +176,186 @@ function cf(q, b, sd, hs) {
         }
         current.setMonth(current.getMonth() + 1);
     }
-
     let f = totalFee;
     if (hs) f = Math.round(f * (1 - SIBLING_DISCOUNT));
     return { f, e: x.e };
 }
 
-function genQR(am,qt){const qr=document.getElementById('qrcode'),ul=document.getElementById('upiLink');const u='upi://pay?pa='+encodeURIComponent(UPI_ID)+'&pn='+encodeURIComponent(ACADEMY_NAME)+'&am='+am+'&cu=INR&tn='+encodeURIComponent('YNFA '+qt);qr.innerHTML='';ul.innerHTML='';if(am>0){const qi='https://api.qrserver.com/v1/create-qr-code/?size=250x250&color=1a237e&bgcolor=FFFFFF&data='+encodeURIComponent(u);const img=document.createElement('img');img.src=qi;img.width=220;img.height=220;img.style.borderRadius='8px';qr.appendChild(img);const a=document.createElement('a');a.href=u;a.className='upi-link-btn';a.textContent='📱 Pay ₹'+am.toLocaleString('en-IN');ul.appendChild(a);}}
-function updateAll(){
-    const q=document.getElementById('quarter').value,b=document.getElementById('batchType').value,sd=document.getElementById('startDate').value;
-    const os=document.getElementById('oldStudent').checked,ej=document.getElementById('extraJersey').checked;
-    const hs=document.getElementById('hasSibling').checked,jo=settings.oldJerseyOptional!==false;
-    if(os&&jo){document.getElementById('jerseyNew').style.display='none';document.getElementById('jerseyOld').style.display='block';}
-    else{document.getElementById('jerseyNew').style.display='block';document.getElementById('jerseyOld').style.display='none';document.getElementById('needJersey').checked=true;}
-    const r=cf(q,b,sd,hs);const needJ=(os&&jo)?document.getElementById('needJersey').checked:true;
-    const jt=!needJ?0:(ej?2000:1000);const rf=os?0:500;const gt=r.f+jt+rf;
-    document.getElementById('coachingFee').textContent='₹'+r.f.toLocaleString('en-IN');document.getElementById('jerseyFee').textContent='₹'+jt;document.getElementById('regFee').textContent='₹'+rf;
-    document.getElementById('grandTotal').textContent='₹'+gt.toLocaleString('en-IN');document.getElementById('regDisp').textContent='Reg: ₹'+rf;
-    document.getElementById('endDate').value=r.e?new Date(r.e).toLocaleDateString('en-IN',{year:'numeric',month:'long',day:'numeric'}):'';
-    document.getElementById('discountNote').innerHTML=q==='full'?'✅ 5% Season Discount!':(b==='pro'?'💼 Pro Batch':'');
-    genQR(gt,q==='full'?'Full Season':(qd[q]?qd[q].s+' to '+qd[q].e:''));
+function genQR(am, qt) {
+    const qr = document.getElementById('qrcode'), ul = document.getElementById('upiLink');
+    const u = 'upi://pay?pa=' + encodeURIComponent(UPI_ID) + '&pn=' + encodeURIComponent(ACADEMY_NAME) + '&am=' + am + '&cu=INR&tn=' + encodeURIComponent('YNFA ' + qt);
+    qr.innerHTML = ''; ul.innerHTML = '';
+    if (am > 0) {
+        const qi = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&color=1a237e&bgcolor=FFFFFF&data=' + encodeURIComponent(u);
+        const img = document.createElement('img');
+        img.src = qi; img.width = 220; img.height = 220; img.style.borderRadius = '8px';
+        qr.appendChild(img);
+        const a = document.createElement('a');
+        a.href = u; a.className = 'upi-link-btn'; a.textContent = '📱 Pay ₹' + am.toLocaleString('en-IN');
+        ul.appendChild(a);
+    }
 }
-function previewReceipt(e){e.stopPropagation();const f=e.target.files[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)){alert('JPG/PNG/WebP!');return}if(f.size>10*1024*1024){alert('Max 10MB!');return}const r=new FileReader();r.onload=function(ev){document.getElementById('receiptImg').src=ev.target.result;document.getElementById('receiptName').textContent='✅ '+f.name;document.getElementById('receiptPreview').style.display='block';document.getElementById('uploadPH').style.display='none';};r.readAsDataURL(f);}
-function removeReceipt(){document.getElementById('receipt').value='';document.getElementById('receiptPreview').style.display='none';document.getElementById('uploadPH').style.display='block';}
-async function submitForm(e){
-    e.preventDefault();if(!document.getElementById('consent').checked){alert('Agree to terms');return false;}
-    const hs=document.getElementById('hasSibling').checked;if(hs&&!document.getElementById('siblingName').value.trim()){alert('Enter sibling name');return false;}
-    const q=document.getElementById('quarter').value;if(!q)return false;document.getElementById('loading').classList.add('on');
-    const os=document.getElementById('oldStudent').checked,jo=settings.oldJerseyOptional!==false;
-    const needJ=(os&&jo)?document.getElementById('needJersey').checked:true;
-    const b=document.getElementById('batchType').value,sd=document.getElementById('startDate').value;
-    const r=cf(q,b,sd,hs);const jt=!needJ?0:(document.getElementById('extraJersey').checked?2000:1000);const rf=os?0:500,gt=r.f+jt+rf;
-    const payload={studentName:document.getElementById('sname').value,parentName:document.getElementById('pname').value,age:document.getElementById('age').value,dob:document.getElementById('dob').value,gender:document.getElementById('gender').value,mobile:document.getElementById('mobile').value,email:document.getElementById('email').value,address:document.getElementById('address').value,hasSibling:hs,siblingName:hs?document.getElementById('siblingName').value:'',siblingAge:hs?document.getElementById('siblingAge').value:'',siblingId:hs?document.getElementById('siblingId').value:'',siblingDiscount:hs?'5%':'None',oldStudent:os,quarter:q,planDetail:q==='full'?'Full Season':(qd[q]?.s+' to '+qd[q]?.e),batch:bd[b]||b,startDate:sd,endDate:r.e,coachingFee:r.f,jerseyFee:jt,regFee:rf,totalFee:gt,paymentMode:document.getElementById('paymentMode').value,paidDate:document.getElementById('paidDate').value,receiptFileName:document.getElementById('receipt').files[0]?.name||'N/A',transactionId:document.getElementById('txnId').value||'N/A',experience:document.getElementById('experience').value,playingStyle:document.getElementById('playingStyle').value,medical:document.getElementById('medical').value||'None'};
-    try{
-        const resp=await fetch(SHEET_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-        const result=await resp.json();
-        if(result.status==='success'){
-            document.getElementById('loading').classList.remove('on');document.getElementById('formContent').style.display='none';document.getElementById('okMsg').classList.add('show');document.getElementById('okId').textContent=result.studentId;
-            document.getElementById('sid').value=result.studentId;
-            document.getElementById('idDisplay').textContent=result.studentId;
-            document.getElementById('entityName').innerHTML='<strong>YN Sports for Excellence</strong><br>(Subsidary of WoW Fashion & Sports)';document.getElementById('centreNameDisplay').textContent=ACADEMY_NAME;
-            document.getElementById('feeBreakup').innerHTML=`Coaching Fee (incl. 18% GST): ₹${r.f.toLocaleString('en-IN')}<br>`+(hs?`Sibling Discount (5%): -₹${Math.round(r.f*0.05).toLocaleString('en-IN')}<br>`:'')+(q==='full'?`Season Discount (5%): -₹${Math.round(r.f*0.05).toLocaleString('en-IN')}<br>`:'')+`Jersey Fee (incl. 5% GST): ₹${jt.toLocaleString('en-IN')}<br>`+`Registration Fee (incl. 18% GST): ₹${rf.toLocaleString('en-IN')}`;
-            document.getElementById('finalTotal').textContent='₹'+gt.toLocaleString('en-IN');
-        }else{alert('Submission failed.');}
-    }catch(err){alert('Network error.');}
-    document.getElementById('loading').classList.remove('on');return false;
+
+function updateAll() {
+    const q = document.getElementById('quarter').value, b = document.getElementById('batchType').value, sd = document.getElementById('startDate').value;
+    const os = document.getElementById('oldStudent').checked, ej = document.getElementById('extraJersey').checked;
+    const hs = document.getElementById('hasSibling').checked, jo = settings.oldJerseyOptional !== false;
+    if (os && jo) { document.getElementById('jerseyNew').style.display = 'none'; document.getElementById('jerseyOld').style.display = 'block'; }
+    else { document.getElementById('jerseyNew').style.display = 'block'; document.getElementById('jerseyOld').style.display = 'none'; document.getElementById('needJersey').checked = true; }
+    const r = cf(q, b, sd, hs);
+    const needJ = (os && jo) ? document.getElementById('needJersey').checked : true;
+    const jt = !needJ ? 0 : (ej ? 2000 : 1000);
+    const rf = os ? 0 : 500;
+    const gt = r.f + jt + rf;
+    document.getElementById('coachingFee').textContent = '₹' + r.f.toLocaleString('en-IN');
+    document.getElementById('jerseyFee').textContent = '₹' + jt;
+    document.getElementById('regFee').textContent = '₹' + rf;
+    document.getElementById('grandTotal').textContent = '₹' + gt.toLocaleString('en-IN');
+    document.getElementById('regDisp').textContent = 'Reg: ₹' + rf;
+    document.getElementById('endDate').value = r.e ? new Date(r.e).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+    document.getElementById('discountNote').innerHTML = q === 'full' ? '✅ 5% Season Discount!' : (b === 'pro' ? '💼 Pro Batch' : '');
+    genQR(gt, q === 'full' ? 'Full Season' : (qd[q] ? qd[q].s + ' to ' + qd[q].e : ''));
 }
-function resetForm(){document.getElementById('form').reset();document.getElementById('formContent').style.display='flex';document.getElementById('okMsg').classList.remove('show');document.getElementById('siblingSection').style.display='none';removeReceipt();document.getElementById('sid').value='---';document.getElementById('idDisplay').textContent='YNFAV------';updateAll();document.getElementById('paidDate').value=new Date().toISOString().split('T')[0];}
-window.onload=function(){document.getElementById('paidDate').value=new Date().toISOString().split('T')[0];document.getElementById('dob').max=new Date().toISOString().split('T')[0];updateAll();};
-['quarter','batchType'].forEach(id=>document.getElementById(id).addEventListener('change',updateAll));document.getElementById('startDate').addEventListener('change',updateAll);document.getElementById('oldStudent').addEventListener('change',updateAll);document.getElementById('extraJersey').addEventListener('change',updateAll);document.getElementById('needJersey').addEventListener('change',updateAll);
+
+function previewReceipt(e) {
+    e.stopPropagation();
+    const f = e.target.files[0];
+    if (!f) return;
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(f.type)) { alert('JPG/PNG/WebP!'); return; }
+    if (f.size > 10 * 1024 * 1024) { alert('Max 10MB!'); return; }
+    const r = new FileReader();
+    r.onload = function (ev) {
+        document.getElementById('receiptImg').src = ev.target.result;
+        document.getElementById('receiptName').textContent = '✅ ' + f.name;
+        document.getElementById('receiptPreview').style.display = 'block';
+        document.getElementById('uploadPH').style.display = 'none';
+    };
+    r.readAsDataURL(f);
+}
+
+function removeReceipt() {
+    document.getElementById('receipt').value = '';
+    document.getElementById('receiptPreview').style.display = 'none';
+    document.getElementById('uploadPH').style.display = 'block';
+}
+
+async function submitForm(e) {
+    e.preventDefault();
+    if (!document.getElementById('consent').checked) { alert('Agree to terms'); return false; }
+    const mode = document.getElementById('paymentMode').value;
+    if (!mode) { alert('Select payment mode'); return false; }
+    const hasFile = document.getElementById('receipt').files.length > 0;
+    const txn = document.getElementById('txnId').value.trim();
+    if (mode === 'UPI' && !hasFile && !txn) {
+        alert('For UPI payments, please provide either a payment screenshot or the transaction ID.');
+        return false;
+    }
+    const hs = document.getElementById('hasSibling').checked;
+    if (hs && !document.getElementById('siblingName').value.trim()) { alert('Enter sibling name'); return false; }
+    const q = document.getElementById('quarter').value;
+    if (!q) return false;
+    document.getElementById('loading').classList.add('on');
+
+    const os = document.getElementById('oldStudent').checked;
+    const jo = settings.oldJerseyOptional !== false;
+    const needJ = (os && jo) ? document.getElementById('needJersey').checked : true;
+    const b = document.getElementById('batchType').value;
+    const sd = document.getElementById('startDate').value;
+    const r = cf(q, b, sd, hs);
+    const jt = !needJ ? 0 : (document.getElementById('extraJersey').checked ? 2000 : 1000);
+    const rf = os ? 0 : 500;
+    const gt = r.f + jt + rf;
+
+    const payload = new URLSearchParams();
+    payload.append('studentName', document.getElementById('sname').value);
+    payload.append('parentName', document.getElementById('pname').value);
+    payload.append('age', document.getElementById('age').value);
+    payload.append('dob', document.getElementById('dob').value);
+    payload.append('gender', document.getElementById('gender').value);
+    payload.append('mobile', document.getElementById('mobile').value);
+    payload.append('email', document.getElementById('email').value);
+    payload.append('address', document.getElementById('address').value);
+    payload.append('hasSibling', hs ? 'Yes' : 'No');
+    payload.append('siblingName', hs ? document.getElementById('siblingName').value : '');
+    payload.append('siblingAge', hs ? document.getElementById('siblingAge').value : '');
+    payload.append('siblingId', hs ? document.getElementById('siblingId').value : '');
+    payload.append('siblingDiscount', hs ? '5%' : 'None');
+    payload.append('oldStudent', os ? 'Yes' : 'No');
+    payload.append('quarter', q);
+    payload.append('planDetail', q === 'full' ? 'Full Season' : (qd[q] ? qd[q].s + ' to ' + qd[q].e : ''));
+    payload.append('batch', bd[b] || b);
+    payload.append('selectedDays', '');
+    payload.append('startDate', sd);
+    payload.append('endDate', r.e);
+    payload.append('coachingFee', r.f);
+    payload.append('jerseyFee', jt);
+    payload.append('regFee', rf);
+    payload.append('totalFee', gt);
+    payload.append('paymentMode', mode);
+    payload.append('paidDate', document.getElementById('paidDate').value);
+    payload.append('receiptFileName', hasFile ? document.getElementById('receipt').files[0].name : 'N/A');
+    payload.append('transactionId', txn || 'N/A');
+    payload.append('experience', document.getElementById('experience').value);
+    payload.append('playingStyle', document.getElementById('playingStyle').value);
+    payload.append('medical', document.getElementById('medical').value || 'None');
+
+    try {
+        const resp = await fetch(SHEET_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: payload.toString()
+        });
+        const result = await resp.json();
+        if (result.status === 'success') {
+            document.getElementById('loading').classList.remove('on');
+            document.getElementById('formContent').style.display = 'none';
+            document.getElementById('okMsg').classList.add('show');
+            document.getElementById('okId').textContent = result.studentId;
+            document.getElementById('sid').value = result.studentId;
+            document.getElementById('idDisplay').textContent = result.studentId;
+            document.getElementById('entityName').innerHTML = '<strong>YN Sports for Excellence</strong><br>(Subsidary of WoW Fashion & Sports)';
+            document.getElementById('centreNameDisplay').textContent = ACADEMY_NAME;
+            document.getElementById('feeBreakup').innerHTML = `Coaching Fee (incl. 18% GST): ₹${r.f.toLocaleString('en-IN')}<br>` +
+                (hs ? `Sibling Discount (5%): -₹${Math.round(r.f * 0.05).toLocaleString('en-IN')}<br>` : '') +
+                (q === 'full' ? `Season Discount (5%): -₹${Math.round(r.f * 0.05).toLocaleString('en-IN')}<br>` : '') +
+                `Jersey Fee (incl. 5% GST): ₹${jt.toLocaleString('en-IN')}<br>` +
+                `Registration Fee (incl. 18% GST): ₹${rf.toLocaleString('en-IN')}`;
+            document.getElementById('finalTotal').textContent = '₹' + gt.toLocaleString('en-IN');
+        } else {
+            alert('Server error: ' + (result.message || 'Unknown error'));
+        }
+    } catch (err) {
+        console.error('Fetch error:', err);
+        alert('Network error: ' + err.message + ' – Check that the Apps Script URL is correct and deployed with "Anyone" access.');
+    }
+    document.getElementById('loading').classList.remove('on');
+    return false;
+}
+
+function resetForm() {
+    document.getElementById('form').reset();
+    document.getElementById('formContent').style.display = 'flex';
+    document.getElementById('okMsg').classList.remove('show');
+    document.getElementById('siblingSection').style.display = 'none';
+    removeReceipt();
+    document.getElementById('sid').value = '---';
+    document.getElementById('idDisplay').textContent = 'YNFAV------';
+    updateAll();
+    document.getElementById('paidDate').value = new Date().toISOString().split('T')[0];
+    togglePaymentFields();
+}
+
+window.onload = function () {
+    document.getElementById('paidDate').value = new Date().toISOString().split('T')[0];
+    document.getElementById('dob').max = new Date().toISOString().split('T')[0];
+    updateAll();
+    togglePaymentFields();
+};
+['quarter', 'batchType'].forEach(id => document.getElementById(id).addEventListener('change', updateAll));
+document.getElementById('startDate').addEventListener('change', updateAll);
+document.getElementById('oldStudent').addEventListener('change', updateAll);
+document.getElementById('extraJersey').addEventListener('change', updateAll);
+document.getElementById('needJersey').addEventListener('change', updateAll);
 </script>
 </body>
 </html>
