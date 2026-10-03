@@ -55,7 +55,6 @@
         .check-section{background:#e3f2fd;border-radius:1rem;padding:1rem;border:1px solid #2196F3;margin-bottom:1rem}
         .consent-box{background:#fff;border:2px solid #d4af37;border-radius:.8rem;padding:1rem;margin-top:1rem}
         .renewal-banner{display:none;background:#e8f5e9;border:2px solid #2e7d32;border-radius:1rem;padding:1rem;margin-bottom:1rem;color:#1b5e20;font-size:.85rem;line-height:1.5}
-
         .batch-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-top:.3rem}
         .batch-card{background:#fffef7;border:2px solid #e0d4a8;border-radius:1rem;padding:.85rem;cursor:pointer;transition:all .18s ease;position:relative;user-select:none}
         .batch-card:hover{border-color:var(--orange);transform:translateY(-2px);box-shadow:0 4px 12px rgba(255,111,0,.15)}
@@ -72,7 +71,6 @@
         .batch-card.is-current .bc-badge::after{content:'Current'}
         .batch-card.is-changed .bc-badge{display:inline-block;background:#ff6f00}
         .batch-card.is-changed .bc-badge::after{content:'New'}
-
         .ledger{background:linear-gradient(180deg,#fffef7,#fff8e7);border:2px solid var(--gold);border-radius:1.2rem;overflow:hidden;margin-top:.3rem;box-shadow:0 4px 14px rgba(0,0,0,.06)}
         .lg-header{background:linear-gradient(90deg,var(--blue),#283593);color:#ffd966;padding:.7rem 1rem;font-weight:800;font-size:.85rem;display:flex;justify-content:space-between;align-items:center;letter-spacing:.5px}
         .lg-mode{background:var(--orange);color:#fff;padding:.2rem .7rem;border-radius:1rem;font-size:.65rem;letter-spacing:.3px;text-transform:uppercase}
@@ -86,12 +84,13 @@
         .lg-total{display:flex;justify-content:space-between;align-items:center;padding:.8rem 1rem;background:linear-gradient(90deg,#fff8e7,#ffe9cc);border-top:2px dashed var(--gold);font-weight:800;color:var(--blue);font-size:.85rem;letter-spacing:.3px}
         .lg-total b{color:#e65100;font-size:1.35rem}
         .lg-note{padding:.4rem 1rem .7rem;font-size:.7rem;color:#888;line-height:1.35}
-
-        @media(max-width:600px){
-            .r2,.r3{grid-template-columns:1fr}
-            .batch-grid{grid-template-columns:1fr}
-            .qr-container img{width:180px!important;height:180px!important}
-        }
+        /* Skeleton loader */
+        .skeleton{background:#e3f2fd;border-radius:.5rem;padding:1rem;margin-top:.5rem}
+        .sk-line{height:14px;background:linear-gradient(90deg,#d0e3f5 25%,#e3f2fd 50%,#d0e3f5 75%);background-size:200% 100%;animation:shine 1.2s infinite;border-radius:4px;margin:.4rem 0}
+        .sk-line.w40{width:40%}.sk-line.w60{width:60%}.sk-line.w80{width:80%}
+        @keyframes shine{0%{background-position:200% 0}100%{background-position:-200% 0}}
+        .cache-badge{font-size:.65rem;color:#2e7d32;font-weight:600;margin-left:.3rem}
+        @media(max-width:600px){.r2,.r3{grid-template-columns:1fr}.batch-grid{grid-template-columns:1fr}.qr-container img{width:180px!important;height:180px!important}}
     </style>
 </head>
 <body>
@@ -123,10 +122,10 @@
             <strong>🔍 Already Registered?</strong>
             <p style="font-size:.8rem;margin:.3rem 0">Enter the Email or Mobile used at registration</p>
             <div class="r2">
-                <div class="inp"><input type="email" id="checkEmail" placeholder="Email"></div>
-                <div class="inp"><input type="tel" id="checkMobile" placeholder="Mobile" pattern="[0-9]{10}"></div>
+                <div class="inp"><input type="email" id="checkEmail" placeholder="Email" autocomplete="email"></div>
+                <div class="inp"><input type="tel" id="checkMobile" placeholder="Mobile" pattern="[0-9]{10}" autocomplete="tel"></div>
             </div>
-            <button type="button" onclick="checkExisting()" style="background:#2196F3;color:#fff;border:0;padding:.5rem;border-radius:2rem;cursor:pointer;font-weight:600;margin-top:.5rem;width:100%">🔍 Find My Student ID</button>
+            <button type="button" id="findBtn" onclick="checkExisting()" style="background:#2196F3;color:#fff;border:0;padding:.5rem;border-radius:2rem;cursor:pointer;font-weight:600;margin-top:.5rem;width:100%">🔍 Find My Student ID</button>
             <div id="checkResult" style="margin-top:.5rem"></div>
         </div>
 
@@ -150,38 +149,10 @@
             <div class="inp">
                 <label>Choose Batch <span class="req">*</span> <span id="batchHint" style="font-weight:400;color:#888;font-size:.72rem"></span></label>
                 <div class="batch-grid" id="batchGrid">
-                    <div class="batch-card" data-batch="batch1" onclick="selectBatch('batch1')">
-                        <span class="bc-badge"></span>
-                        <div class="bc-name">Batch 1</div>
-                        <div class="bc-days">Wed · Thu · Fri</div>
-                        <div class="bc-time">5:00 – 6:30 PM</div>
-                        <div class="bc-rate">₹355 <small>/ class</small></div>
-                        <div class="bc-note">~12 classes / month</div>
-                    </div>
-                    <div class="batch-card" data-batch="batch2" onclick="selectBatch('batch2')">
-                        <span class="bc-badge"></span>
-                        <div class="bc-name">Batch 2</div>
-                        <div class="bc-days">Fri · Sat · Sun</div>
-                        <div class="bc-time">5:00 – 6:30 PM</div>
-                        <div class="bc-rate">₹355 <small>/ class</small></div>
-                        <div class="bc-note">~12 classes / month</div>
-                    </div>
-                    <div class="batch-card" data-batch="batch3" onclick="selectBatch('batch3')">
-                        <span class="bc-badge"></span>
-                        <div class="bc-name">Batch 3</div>
-                        <div class="bc-days">Sat · Sun</div>
-                        <div class="bc-time">5:00 – 6:30 PM</div>
-                        <div class="bc-rate">₹469 <small>/ class</small></div>
-                        <div class="bc-note">~8 classes / month</div>
-                    </div>
-                    <div class="batch-card" data-batch="pro" onclick="selectBatch('pro')">
-                        <span class="bc-badge"></span>
-                        <div class="bc-name">Pro Batch</div>
-                        <div class="bc-days">Wed – Sun · 5 days</div>
-                        <div class="bc-time">6:30 – 8:00 PM · 8+ yrs</div>
-                        <div class="bc-rate">₹47,500 <small>/ season</small></div>
-                        <div class="bc-note">Full season package</div>
-                    </div>
+                    <div class="batch-card" data-batch="batch1" onclick="selectBatch('batch1')"><span class="bc-badge"></span><div class="bc-name">Batch 1</div><div class="bc-days">Wed · Thu · Fri</div><div class="bc-time">5:00 – 6:30 PM</div><div class="bc-rate">₹355 <small>/ class</small></div><div class="bc-note">~12 classes / month</div></div>
+                    <div class="batch-card" data-batch="batch2" onclick="selectBatch('batch2')"><span class="bc-badge"></span><div class="bc-name">Batch 2</div><div class="bc-days">Fri · Sat · Sun</div><div class="bc-time">5:00 – 6:30 PM</div><div class="bc-rate">₹355 <small>/ class</small></div><div class="bc-note">~12 classes / month</div></div>
+                    <div class="batch-card" data-batch="batch3" onclick="selectBatch('batch3')"><span class="bc-badge"></span><div class="bc-name">Batch 3</div><div class="bc-days">Sat · Sun</div><div class="bc-time">5:00 – 6:30 PM</div><div class="bc-rate">₹469 <small>/ class</small></div><div class="bc-note">~8 classes / month</div></div>
+                    <div class="batch-card" data-batch="pro" onclick="selectBatch('pro')"><span class="bc-badge"></span><div class="bc-name">Pro Batch</div><div class="bc-days">Wed – Sun · 5 days</div><div class="bc-time">6:30 – 8:00 PM · 8+ yrs</div><div class="bc-rate">₹47,500 <small>/ season</small></div><div class="bc-note">Full season package</div></div>
                 </div>
                 <select id="batchType" required style="display:none"><option value="">--</option><option value="batch1">Batch 1</option><option value="batch2">Batch 2</option><option value="batch3">Batch 3</option><option value="pro">Pro</option></select>
             </div>
@@ -202,10 +173,7 @@
 
             <span class="sec">💼 PAYMENT SUMMARY</span>
             <div class="ledger" id="ledger">
-                <div class="lg-header">
-                    <span>💼 PAYMENT SUMMARY</span>
-                    <span class="lg-mode" id="lgMode">New Registration</span>
-                </div>
+                <div class="lg-header"><span>💼 PAYMENT SUMMARY</span><span class="lg-mode" id="lgMode">New Registration</span></div>
                 <div class="lg-body">
                     <div class="lg-row"><span>Student</span><b id="lgStudent">—</b></div>
                     <div class="lg-row"><span>Batch</span><b id="lgBatch">—</b></div>
@@ -245,25 +213,30 @@
 </div>
 <script>
 /* =====================================================================
-   YNFA VARTHUR – REGISTRATION FRONT-END  (per-class fee + 7-day grace)
+   YNFA VARTHUR — Production Front-end
+   Per-class fee + 7-day grace + optimized lookup
    ===================================================================== */
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxoxoafncvm5mcE6inzRPxUHR2RmAGkcJyLeQyht_KvH5ADx3MGtvHXzwKZymfCU1Rdiw/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxWdAbH_j5_ajNf5yXhxRlvpe4vUo0rOrjwNEZD3mL_EQHjRsg3V--YRN--fwxVRDXx7Q/exec';
 const ACADEMY_NAME = 'YNFA Varthur';
 const SIBLING_DISCOUNT = 0.05;
+
+/* ---------- Lookup tuning ---------- */
+const LOOKUP_TIMEOUT_MS = 15000;
+const LOOKUP_CACHE_TTL_MS = 5 * 60 * 1000;
+const LOOKUP_CACHE_PREFIX = 'ynfa_lk_';
+const LOOKUP_RETRY = 1;
 
 const qd = {
     Q1:{s:'2026-06-01', e:'2026-09-30'},
     Q2:{s:'2026-10-01', e:'2026-12-31'},
     Q3:{s:'2027-01-01', e:'2027-03-31'}
 };
-
 const BATCH = {
-    batch1: { days:[3,4,5],    rate:355, name:'Batch 1', daysTxt:'Wed, Thu, Fri' },
-    batch2: { days:[5,6,0],    rate:355, name:'Batch 2', daysTxt:'Fri, Sat, Sun' },
-    batch3: { days:[6,0],      rate:469, name:'Batch 3', daysTxt:'Sat, Sun' },
-    pro:    { days:[3,4,5,6,0],rate:0,   name:'Pro',     daysTxt:'Wed-Sun (5 days)', season:47500 }
+    batch1:{days:[3,4,5],    rate:355, name:'Batch 1', daysTxt:'Wed, Thu, Fri'},
+    batch2:{days:[5,6,0],    rate:355, name:'Batch 2', daysTxt:'Fri, Sat, Sun'},
+    batch3:{days:[6,0],      rate:469, name:'Batch 3', daysTxt:'Sat, Sun'},
+    pro:   {days:[3,4,5,6,0],rate:0,   name:'Pro',     daysTxt:'Wed-Sun (5 days)', season:47500}
 };
-
 const bd = {
     batch1:'Batch 1: Wed, Thu, Fri ₹355/class',
     batch2:'Batch 2: Fri, Sat, Sun ₹355/class',
@@ -275,8 +248,10 @@ const settings = JSON.parse(localStorage.getItem('ynfaVSettings') || '{}');
 const UPI_ID = settings.upiId || '0798121A0079936.BQR@kotak';
 let RENEWAL = null;
 let FOUND   = {};
+let _lookupAbort = null;
+let _lookupSeq = 0;
 
-/* Logo */
+/* Logo / contact */
 const savedLogo = localStorage.getItem('ynfaVLogo');
 if (savedLogo) {
     document.getElementById('hlogo').src = savedLogo; document.getElementById('hlogo').classList.add('show');
@@ -290,38 +265,28 @@ function normMobile(s){ return String(s || '').replace(/\D/g, '').slice(-10); }
 function cfgOk(){ return SHEET_URL && SHEET_URL.indexOf('YOUR_APPS_SCRIPT_URL') === -1; }
 function fmt(n){ return '₹' + (Number(n)||0).toLocaleString('en-IN'); }
 
-/* ================== FEE ENGINE (per-class + 7-day grace) ================== */
+/* ================= FEE ENGINE (7-day grace) ================= */
 function quarterFee(q, b, sd) {
     const x = qd[q];
     if (!x) return { f:0, e:'', classes:0, rate:0 };
-
     if (b === 'pro') return { f: BATCH.pro.season, e:'2027-03-31', classes:0, rate:0 };
-
     const rate = (BATCH[b] && BATCH[b].rate) || 355;
     const qs = new Date(x.s), qe = new Date(x.e), jd = new Date(sd);
     if (jd > qe) return { f:0, e:'', classes:0, rate:rate };
-
     const effStart = jd > qs ? jd : qs;
     const days = BATCH[b].days;
-
     let totalClasses = 0;
     let cur = new Date(effStart.getFullYear(), effStart.getMonth(), 1);
     const lastMonth = new Date(qe.getFullYear(), qe.getMonth(), 1);
-
     while (cur <= lastMonth) {
-        const y = cur.getFullYear();
-        const m = cur.getMonth();
-
+        const y = cur.getFullYear(), m = cur.getMonth();
         let startDay = 1;
         if (y === effStart.getFullYear() && m === effStart.getMonth()) {
-            /* 7-day grace: joining on day 1–7 ⇒ full month */
             startDay = (effStart.getDate() <= 7) ? 1 : effStart.getDate();
         }
-
         const lastDayOfMonth = new Date(y, m + 1, 0).getDate();
         let endDay = lastDayOfMonth;
         if (y === qe.getFullYear() && m === qe.getMonth()) endDay = Math.min(endDay, qe.getDate());
-
         const d = new Date(y, m, startDay);
         for (let day = startDay; day <= endDay; day++) {
             d.setDate(day);
@@ -329,59 +294,44 @@ function quarterFee(q, b, sd) {
         }
         cur.setMonth(cur.getMonth() + 1);
     }
-
     return { f: totalClasses * rate, e: x.e, classes: totalClasses, rate: rate };
 }
-
 function cf(q, b, sd, hs, paid) {
     paid = paid || [];
     const empty = { f:0, e:'', gross:0, seasonDisc:0, sibDisc:0, classes:0, rate:0 };
     if (!q || !b || !sd) return empty;
-
     if (b === 'pro') {
         const gross = BATCH.pro.season;
         let sibDisc = 0, net = gross;
         if (hs) { sibDisc = Math.round(gross * 0.05); net = gross - sibDisc; }
         return { f:net, e:'2027-03-31', gross:gross, seasonDisc:0, sibDisc:sibDisc, classes:0, rate:0 };
     }
-
     let keys;
     if (q === 'full') keys = ['Q1','Q2','Q3'].filter(function(k){ return paid.indexOf(k) === -1; });
-    else {
-        if (paid.indexOf(q) > -1) return empty;
-        keys = [q];
-    }
+    else { if (paid.indexOf(q) > -1) return empty; keys = [q]; }
     if (!keys.length) return empty;
-
     let gross = 0, classes = 0, end = '', rate = 0;
     keys.forEach(function(k){
         const r = quarterFee(k, b, sd);
-        gross += r.f;
-        classes += r.classes;
-        rate = r.rate;
+        gross += r.f; classes += r.classes; rate = r.rate;
         if (r.e) end = r.e;
     });
-
     let seasonDisc = 0, afterSeason = gross;
-    if (q === 'full' && keys.length > 1) {
-        seasonDisc = Math.round(gross * 0.05);
-        afterSeason = gross - seasonDisc;
-    }
+    if (q === 'full' && keys.length > 1) { seasonDisc = Math.round(gross * 0.05); afterSeason = gross - seasonDisc; }
     let sibDisc = 0, net = afterSeason;
     if (hs) { sibDisc = Math.round(afterSeason * 0.05); net = afterSeason - sibDisc; }
-
     return { f:net, e:end, gross:gross, seasonDisc:seasonDisc, sibDisc:sibDisc, classes:classes, rate:rate };
 }
 
-/* ================== QUARTER DROPDOWN ================== */
+/* ================= QUARTER DROPDOWN ================= */
 function rebuildQuarterOptions(paid) {
     paid = paid || [];
     const sel = document.getElementById('quarter');
     const remaining = ['Q1','Q2','Q3'].filter(function(k){ return paid.indexOf(k) === -1; });
     const opts = [
-        { v:'Q1',   t:'Q1: Jun-Sep 2026' },
-        { v:'Q2',   t:'Q2: Oct-Dec 2026' },
-        { v:'Q3',   t:'Q3: Jan-Mar 2027' },
+        { v:'Q1', t:'Q1: Jun-Sep 2026' },
+        { v:'Q2', t:'Q2: Oct-Dec 2026' },
+        { v:'Q3', t:'Q3: Jan-Mar 2027' },
         { v:'full', t:'Full Season 🔥5% OFF' }
     ];
     sel.innerHTML = '<option value="">--</option>' + opts.map(function(o){
@@ -389,27 +339,20 @@ function rebuildQuarterOptions(paid) {
         if (o.v === 'full') {
             if (remaining.length < 2) dis = 'disabled';
             if (remaining.length < 3 && remaining.length > 1) label = 'Remaining Season (' + remaining.join('+') + ') 🔥5% OFF';
-        } else if (paid.indexOf(o.v) > -1) {
-            dis = 'disabled'; label = o.t + ' ✅ PAID';
-        }
+        } else if (paid.indexOf(o.v) > -1) { dis = 'disabled'; label = o.t + ' ✅ PAID'; }
         return '<option value="' + o.v + '" ' + dis + '>' + label + '</option>';
     }).join('');
 }
 
-/* ================== BATCH UI ================== */
+/* ================= BATCH UI ================= */
 function selectBatch(v) {
     document.getElementById('batchType').value = v;
-    document.querySelectorAll('.batch-card').forEach(function(c){
-        c.classList.toggle('selected', c.dataset.batch === v);
-    });
-    updateBatchCards();
-    updateAll();
+    document.querySelectorAll('.batch-card').forEach(function(c){ c.classList.toggle('selected', c.dataset.batch === v); });
+    updateBatchCards(); updateAll();
 }
 function applyBatchUI(v) {
     document.getElementById('batchType').value = v || '';
-    document.querySelectorAll('.batch-card').forEach(function(c){
-        c.classList.toggle('selected', c.dataset.batch === v);
-    });
+    document.querySelectorAll('.batch-card').forEach(function(c){ c.classList.toggle('selected', c.dataset.batch === v); });
     updateBatchCards();
 }
 function updateBatchCards() {
@@ -421,14 +364,46 @@ function updateBatchCards() {
         if (cur && c.dataset.batch === sel && sel !== cur) c.classList.add('is-changed');
     });
     const hint = document.getElementById('batchHint');
-    hint.textContent = (RENEWAL && cur)
-        ? '· currently in ' + (BATCH[cur] ? BATCH[cur].name : cur) + ' — you can change'
-        : '';
+    hint.textContent = (RENEWAL && cur) ? '· currently in ' + (BATCH[cur] ? BATCH[cur].name : cur) + ' — you can change' : '';
 }
 
-/* ================== LOOKUP ================== */
+/* ================= FAST LOOKUP ================= */
+function getCachedLookup(email, mobile) {
+    try {
+        const k = LOOKUP_CACHE_PREFIX + (email || '') + '|' + (mobile || '');
+        const raw = sessionStorage.getItem(k);
+        if (!raw) return null;
+        const obj = JSON.parse(raw);
+        if (Date.now() - obj.t > LOOKUP_CACHE_TTL_MS) { sessionStorage.removeItem(k); return null; }
+        return obj.data;
+    } catch (e) { return null; }
+}
+function setCachedLookup(email, mobile, data) {
+    try {
+        const k = LOOKUP_CACHE_PREFIX + (email || '') + '|' + (mobile || '');
+        sessionStorage.setItem(k, JSON.stringify({ t: Date.now(), data: data }));
+    } catch (e) {}
+}
+function skeletonHTML() {
+    return '<div class="skeleton">' +
+        '<div class="sk-line w40"></div>' +
+        '<div class="sk-line w80"></div>' +
+        '<div class="sk-line w60"></div>' +
+        '<div class="sk-line w80"></div>' +
+    '</div>';
+}
+function fetchWithTimeout(url, signal, ms) {
+    return new Promise(function(resolve, reject) {
+        const t = setTimeout(function(){ reject(new Error('timeout')); }, ms);
+        fetch(url, { method:'GET', redirect:'follow', signal: signal })
+            .then(function(r){ clearTimeout(t); resolve(r); })
+            .catch(function(e){ clearTimeout(t); reject(e); });
+    });
+}
+
 async function checkExisting() {
     const box    = document.getElementById('checkResult');
+    const btn    = document.getElementById('findBtn');
     const email  = document.getElementById('checkEmail').value.trim().toLowerCase();
     const mobile = normMobile(document.getElementById('checkMobile').value);
 
@@ -443,37 +418,65 @@ async function checkExisting() {
         return;
     }
 
-    box.innerHTML = '<div class="existing-msg">🔍 Searching…</div>';
+    /* --- Cache hit? instant --- */
+    const cached = getCachedLookup(email, mobile);
+    if (cached) {
+        FOUND = {};
+        (cached.students || []).forEach(function(s){ FOUND[s.studentId] = s; });
+        renderExisting(cached.students || [], true);
+        return;
+    }
+
+    /* --- Cancel any in-flight lookup --- */
+    if (_lookupAbort) { try { _lookupAbort.abort(); } catch(e){} }
+    _lookupAbort = new AbortController();
+    const mySeq = ++_lookupSeq;
+
+    btn.disabled = true; btn.textContent = '⏳ Searching…';
+    box.innerHTML = skeletonHTML();
+
     const url = SHEET_URL + '?action=find' +
         '&email='  + encodeURIComponent(email) +
         '&mobile=' + encodeURIComponent(mobile) +
         '&t='      + Date.now();
 
-    try {
-        const resp = await fetch(url, { method:'GET', redirect:'follow' });
-        const raw  = await resp.text();
-        let data;
-        try { data = JSON.parse(raw); }
-        catch (pe) {
-            box.innerHTML = '<div class="jm">❌ Server returned HTML instead of JSON.<br>' +
-                '<small>Check doGet(), deployment = Anyone, URL ends in /exec.</small><br>' +
-                '<small style="display:block;margin-top:.4rem;color:#c41e3a;word-break:break-all">' + esc(raw.slice(0,200)) + '</small></div>';
+    let attempt = 0, lastErr = null;
+    while (attempt <= LOOKUP_RETRY) {
+        attempt++;
+        try {
+            const resp = await fetchWithTimeout(url, _lookupAbort.signal, LOOKUP_TIMEOUT_MS);
+            const raw  = await resp.text();
+            if (mySeq !== _lookupSeq) return;
+
+            let data;
+            try { data = JSON.parse(raw); }
+            catch (pe) {
+                box.innerHTML = '<div class="jm">❌ Server returned HTML instead of JSON.<br>' +
+                    '<small>Fix: Apps Script → Deploy → Manage deployments → ✏️ → <b>Who has access: Anyone</b> · <b>Version: New version</b> → Deploy. Then use the /exec URL.</small></div>';
+                btn.disabled = false; btn.textContent = '🔍 Find My Student ID';
+                return;
+            }
+            if (data.status !== 'success') { box.innerHTML = '<div class="jm">❌ ' + esc(data.message || 'Lookup failed') + '</div>'; btn.disabled = false; btn.textContent = '🔍 Find My Student ID'; return; }
+            if (!data.students || !data.students.length) { box.innerHTML = '<div class="jm">❌ No registration found for these details.</div>'; btn.disabled = false; btn.textContent = '🔍 Find My Student ID'; return; }
+
+            setCachedLookup(email, mobile, data);
+            FOUND = {};
+            data.students.forEach(function(s){ FOUND[s.studentId] = s; });
+            renderExisting(data.students, false, data._meta);
+            btn.disabled = false; btn.textContent = '🔍 Find My Student ID';
             return;
+        } catch (err) {
+            if (err.name === 'AbortError') return;
+            lastErr = err;
+            if (attempt > LOOKUP_RETRY) break;
+            await new Promise(function(r){ setTimeout(r, 500); });
         }
-        if (data.status !== 'success') {
-            box.innerHTML = '<div class="jm">❌ ' + esc(data.message || 'Lookup failed') + '</div>';
-            return;
-        }
-        if (!data.students || !data.students.length) {
-            box.innerHTML = '<div class="jm">❌ No registration found for these details.</div>';
-            return;
-        }
-        FOUND = {};
-        data.students.forEach(function(s){ FOUND[s.studentId] = s; });
-        renderExisting(data.students);
-    } catch (err) {
-        box.innerHTML = '<div class="jm">❌ Network error: ' + esc(err.message) + '</div>';
     }
+
+    if (mySeq !== _lookupSeq) return;
+    btn.disabled = false; btn.textContent = '🔍 Find My Student ID';
+    box.innerHTML = '<div class="jm">❌ ' + esc(lastErr ? lastErr.message : 'Lookup failed') + '<br>' +
+        '<small>Check internet connection and try again.</small></div>';
 }
 
 function demoLookup() {
@@ -488,13 +491,17 @@ function demoLookup() {
     }];
     FOUND = {};
     demo.forEach(function(s){ FOUND[s.studentId] = s; });
-    renderExisting(demo);
+    renderExisting(demo, false);
     document.getElementById('checkResult').insertAdjacentHTML('beforeend',
         '<div class="jm" style="margin-top:.6rem">⚠️ DEMO — Q1 paid, currently Batch 1. Try changing to Batch 3.</div>');
 }
 
-function renderExisting(list) {
+function renderExisting(list, fromCache, meta) {
     const box = document.getElementById('checkResult');
+    const cacheTag = fromCache ? ' <span class="cache-badge">⚡ instant</span>' :
+        (meta && meta.cached ? ' <span class="cache-badge">⚡ server cache</span>' : '');
+    const timing = (meta && meta.totalMs != null) ? ' <span style="color:#888;font-weight:400;font-size:.7rem">· ' + meta.totalMs + 'ms</span>' : '';
+
     box.innerHTML = list.map(function(s){
         const paid = s.quartersPaid || [];
         const remaining = ['Q1','Q2','Q3'].filter(function(k){ return paid.indexOf(k) === -1; });
@@ -504,14 +511,14 @@ function renderExisting(list) {
         const bName = BATCH[s.batchKey] ? BATCH[s.batchKey].name : (s.batch || '—');
         return '<div class="existing-msg">' +
             '<strong>' + esc(s.studentName) + '</strong> · ' +
-            '<span style="font-family:\'Courier New\',monospace;font-weight:700">' + esc(s.studentId) + '</span><br>' +
+            '<span style="font-family:\'Courier New\',monospace;font-weight:700">' + esc(s.studentId) + '</span>' + cacheTag + timing + '<br>' +
             'Parent: ' + esc(s.parentName) + ' | Mobile: ' + esc(s.mobile) + '<br>' +
             'Current batch: <strong>' + esc(bName) + '</strong><br>' +
             'Quarters paid: <strong>' + (paid.length ? paid.join(', ') : '—') + '</strong>' + btn + '</div>';
     }).join('');
 }
 
-/* ================== RENEWAL MODE ================== */
+/* ================= RENEWAL MODE ================= */
 function lockField(id, val) {
     const el = document.getElementById(id);
     if (!el) return;
@@ -523,22 +530,15 @@ function unlockField(id) {
     if (!el) return;
     el.readOnly = false; el.disabled = false; el.style.background = '';
 }
-
 function startRenewal(id) {
     const s = FOUND[id];
     if (!s) return;
     RENEWAL = s;
-
-    lockField('sname', s.studentName);
-    lockField('pname', s.parentName);
-    lockField('age',   s.age);
-    lockField('dob',   s.dob);
-    lockField('gender',s.gender);
-    lockField('mobile',s.mobile);
-    lockField('email', s.email);
-    lockField('address', s.address);
-    lockField('experience', s.experience);
-    lockField('playingStyle', s.playingStyle);
+    lockField('sname', s.studentName); lockField('pname', s.parentName);
+    lockField('age', s.age); lockField('dob', s.dob);
+    lockField('gender', s.gender); lockField('mobile', s.mobile);
+    lockField('email', s.email); lockField('address', s.address);
+    lockField('experience', s.experience); lockField('playingStyle', s.playingStyle);
     lockField('medical', s.medical);
 
     const hsBox = document.getElementById('hasSibling');
@@ -551,7 +551,6 @@ function startRenewal(id) {
 
     rebuildQuarterOptions(s.quartersPaid || []);
     document.getElementById('quarter').value = '';
-
     applyBatchUI(s.batchKey || '');
 
     const bName = BATCH[s.batchKey] ? BATCH[s.batchKey].name : (s.batch || '—');
@@ -566,11 +565,9 @@ function startRenewal(id) {
     document.getElementById('idDisplay').textContent = s.studentId;
     document.getElementById('checkResult').innerHTML = '';
     document.getElementById('needJersey').checked = false;
-
     updateAll();
     document.getElementById('renewalBanner').scrollIntoView({ behavior:'smooth', block:'center' });
 }
-
 function exitRenewal() {
     RENEWAL = null;
     document.getElementById('renewalBanner').style.display = 'none';
@@ -589,31 +586,28 @@ function exitRenewal() {
     updateAll();
 }
 
-/* ================== QR ================== */
+/* ================= QR ================= */
 function genQR(am, qt) {
     const qr = document.getElementById('qrcode');
     const ul = document.getElementById('upiLink');
     qr.innerHTML = ''; ul.innerHTML = '';
     if (!(am > 0)) return;
-
     const u = 'upi://pay?pa=' + encodeURIComponent(UPI_ID) +
         '&pn=' + encodeURIComponent(ACADEMY_NAME) +
         '&am=' + am + '&cu=INR' +
         '&tn=' + encodeURIComponent('YNFA ' + qt);
-
     const custom = localStorage.getItem('ynfaVScanner');
     const img = document.createElement('img');
     img.width = 220; img.height = 220; img.style.borderRadius = '8px';
     img.src = custom || ('https://api.qrserver.com/v1/create-qr-code/?size=250x250&color=1a237e&bgcolor=FFFFFF&data=' + encodeURIComponent(u));
     qr.appendChild(img);
-
     const a = document.createElement('a');
     a.href = u; a.className = 'upi-link-btn';
     a.textContent = '📱 Pay ' + fmt(am);
     ul.appendChild(a);
 }
 
-/* ================== MAIN UPDATE ================== */
+/* ================= MAIN UPDATE ================= */
 function updateAll() {
     const q  = document.getElementById('quarter').value;
     const b  = document.getElementById('batchType').value;
@@ -632,7 +626,6 @@ function updateAll() {
         document.getElementById('jerseyOld').style.display = 'none';
         document.getElementById('needJersey').checked = true;
     }
-
     const r = cf(q, b, sd, hs, paid);
     const needJ = (os && jo) ? document.getElementById('needJersey').checked : true;
     const jt = !needJ ? 0 : (ej ? 2000 : 1000);
@@ -640,36 +633,24 @@ function updateAll() {
     const gt = r.f + jt + rf;
 
     document.getElementById('regDisp').textContent = 'Reg: ' + fmt(rf);
-    document.getElementById('endDate').value = r.e
-        ? new Date(r.e).toLocaleDateString('en-IN', { year:'numeric', month:'long', day:'numeric' })
-        : '';
-
+    document.getElementById('endDate').value = r.e ? new Date(r.e).toLocaleDateString('en-IN', { year:'numeric', month:'long', day:'numeric' }) : '';
     updateBatchCards();
     updateLedger(r, jt, rf, gt, b, q, sd);
     genQR(gt, q === 'full' ? 'Full Season' : (qd[q] ? qd[q].s + ' to ' + qd[q].e : ''));
 }
-
 function updateLedger(r, jt, rf, gt, b, q, sd) {
-    const sname = document.getElementById('sname').value.trim() || '—';
-    document.getElementById('lgStudent').textContent = sname;
-
+    document.getElementById('lgStudent').textContent = document.getElementById('sname').value.trim() || '—';
     let batchTxt = b && BATCH[b] ? BATCH[b].name : '—';
     if (RENEWAL && RENEWAL.batchKey && b && b !== RENEWAL.batchKey) {
         const prevName = BATCH[RENEWAL.batchKey] ? BATCH[RENEWAL.batchKey].name : RENEWAL.batchKey;
         batchTxt = prevName + ' → ' + BATCH[b].name + ' (changed)';
     }
     document.getElementById('lgBatch').textContent = batchTxt;
-
-    document.getElementById('lgQuarter').textContent = q
-        ? (q === 'full' ? 'Full Season (Q1+Q2+Q3)' : q) : '—';
-
+    document.getElementById('lgQuarter').textContent = q ? (q === 'full' ? 'Full Season (Q1+Q2+Q3)' : q) : '—';
     let periodTxt = '—';
-    if (r.e && sd) {
-        periodTxt = new Date(sd).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) +
-            ' → ' + new Date(r.e).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
-    }
+    if (r.e && sd) periodTxt = new Date(sd).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) +
+        ' → ' + new Date(r.e).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
     document.getElementById('lgPeriod').textContent = periodTxt;
-
     document.getElementById('lgRate').textContent = (b === 'pro') ? '—' : (r.rate ? fmt(r.rate) : '—');
     document.getElementById('lgClasses').textContent = (b === 'pro') ? '—' : r.classes;
     document.getElementById('lgGross').textContent   = fmt(r.gross || 0);
@@ -677,41 +658,27 @@ function updateLedger(r, jt, rf, gt, b, q, sd) {
     document.getElementById('lgJersey').textContent  = fmt(jt);
     document.getElementById('lgReg').textContent     = fmt(rf);
     document.getElementById('lgTotal').textContent   = fmt(gt);
-
     const seasonRow = document.getElementById('lgSeasonRow');
     const sibRow    = document.getElementById('lgSibRow');
-    if (r.seasonDisc > 0) {
-        seasonRow.style.display = 'flex';
-        document.getElementById('lgSeason').textContent = '-' + fmt(r.seasonDisc);
-    } else seasonRow.style.display = 'none';
-    if (r.sibDisc > 0) {
-        sibRow.style.display = 'flex';
-        document.getElementById('lgSib').textContent = '-' + fmt(r.sibDisc);
-    } else sibRow.style.display = 'none';
-
+    if (r.seasonDisc > 0) { seasonRow.style.display = 'flex'; document.getElementById('lgSeason').textContent = '-' + fmt(r.seasonDisc); }
+    else seasonRow.style.display = 'none';
+    if (r.sibDisc > 0) { sibRow.style.display = 'flex'; document.getElementById('lgSib').textContent = '-' + fmt(r.sibDisc); }
+    else sibRow.style.display = 'none';
     const modeEl = document.getElementById('lgMode');
     if (RENEWAL) { modeEl.textContent = 'Renewal · ' + RENEWAL.studentId; modeEl.classList.add('renewal'); }
-    else         { modeEl.textContent = 'New Registration'; modeEl.classList.remove('renewal'); }
-
+    else { modeEl.textContent = 'New Registration'; modeEl.classList.remove('renewal'); }
     let note = 'All fees are inclusive of applicable GST. ';
     if (b !== 'pro' && r.rate && r.classes) note += 'Coaching = ' + r.classes + ' class' + (r.classes>1?'es':'') + ' × ' + fmt(r.rate) + '. ';
     if (q === 'full') note += 'Season discount of 5% already applied. ';
     if (RENEWAL && RENEWAL.batchKey && b && b !== RENEWAL.batchKey) note += 'Batch change: fee recalculated at the new batch rate.';
     if (sd) {
-        const jd = new Date(sd);
-        const x = qd[q];
-        if (x) {
-            const qs = new Date(x.s);
-            if (jd >= qs && jd.getDate() <= 7) note += ' Joined within first 7 days — full month applied.';
-        }
+        const jd = new Date(sd); const x = qd[q];
+        if (x) { const qs = new Date(x.s); if (jd >= qs && jd.getDate() <= 7) note += ' Joined within first 7 days — full month applied.'; }
     }
     document.getElementById('lgNote').textContent = note;
 }
 
-function toggleSibling() {
-    document.getElementById('siblingSection').style.display =
-        document.getElementById('hasSibling').checked ? 'block' : 'none';
-}
+function toggleSibling() { document.getElementById('siblingSection').style.display = document.getElementById('hasSibling').checked ? 'block' : 'none'; }
 function togglePaymentFields() {
     const mode = document.getElementById('paymentMode').value;
     const receiptField = document.getElementById('receiptField');
@@ -748,7 +715,7 @@ function removeReceipt() {
     document.getElementById('uploadPH').style.display = 'block';
 }
 
-/* ================== SUBMIT ================== */
+/* ================= SUBMIT ================= */
 async function submitForm(e) {
     e.preventDefault();
     if (!cfgOk()) { alert('Backend not configured.'); return false; }
@@ -792,47 +759,47 @@ async function submitForm(e) {
     document.getElementById('loading').classList.add('on');
 
     const payload = {
-        studentId:        RENEWAL ? RENEWAL.studentId : '',
-        isRenewal:        !!RENEWAL,
-        previousBatch:    RENEWAL ? (RENEWAL.batchKey || '') : '',
-        batchChanged:     RENEWAL && RENEWAL.batchKey && b !== RENEWAL.batchKey,
-        studentName:      document.getElementById('sname').value.trim(),
-        parentName:       document.getElementById('pname').value.trim(),
-        age:              document.getElementById('age').value,
-        dob:              document.getElementById('dob').value,
-        gender:           document.getElementById('gender').value,
-        mobile:           document.getElementById('mobile').value.trim(),
-        email:            document.getElementById('email').value.trim(),
-        address:          document.getElementById('address').value.trim(),
-        hasSibling:       hs,
-        siblingName:      hs ? document.getElementById('siblingName').value.trim() : '',
-        siblingAge:       hs ? document.getElementById('siblingAge').value : '',
-        siblingId:        hs ? document.getElementById('siblingId').value.trim() : '',
-        siblingDiscount:  hs ? '5%' : 'None',
-        oldStudent:       os || !!RENEWAL,
-        quarter:          q,
-        planDetail:       q === 'full' ? 'Full Season' : (qd[q] ? qd[q].s + ' to ' + qd[q].e : ''),
-        batch:            bd[b] || b,
-        batchKey:         b,
-        selectedDays:     BATCH[b] ? BATCH[b].daysTxt : '',
-        ratePerClass:     r.rate || 0,
-        classesCount:     r.classes || 0,
-        startDate:        sd,
-        endDate:          r.e,
-        coachingFee:      r.f,
-        grossCoaching:    r.gross,
-        seasonDiscount:   r.seasonDisc,
+        studentId: RENEWAL ? RENEWAL.studentId : '',
+        isRenewal: !!RENEWAL,
+        previousBatch: RENEWAL ? (RENEWAL.batchKey || '') : '',
+        batchChanged: RENEWAL && RENEWAL.batchKey && b !== RENEWAL.batchKey,
+        studentName: document.getElementById('sname').value.trim(),
+        parentName: document.getElementById('pname').value.trim(),
+        age: document.getElementById('age').value,
+        dob: document.getElementById('dob').value,
+        gender: document.getElementById('gender').value,
+        mobile: document.getElementById('mobile').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        address: document.getElementById('address').value.trim(),
+        hasSibling: hs,
+        siblingName: hs ? document.getElementById('siblingName').value.trim() : '',
+        siblingAge: hs ? document.getElementById('siblingAge').value : '',
+        siblingId: hs ? document.getElementById('siblingId').value.trim() : '',
+        siblingDiscount: hs ? '5%' : 'None',
+        oldStudent: os || !!RENEWAL,
+        quarter: q,
+        planDetail: q === 'full' ? 'Full Season' : (qd[q] ? qd[q].s + ' to ' + qd[q].e : ''),
+        batch: bd[b] || b,
+        batchKey: b,
+        selectedDays: BATCH[b] ? BATCH[b].daysTxt : '',
+        ratePerClass: r.rate || 0,
+        classesCount: r.classes || 0,
+        startDate: sd,
+        endDate: r.e,
+        coachingFee: r.f,
+        grossCoaching: r.gross,
+        seasonDiscount: r.seasonDisc,
         siblingDiscountAmt: r.sibDisc,
-        jerseyFee:        jt,
-        regFee:           rf,
-        totalFee:         gt,
-        paymentMode:      mode,
-        paidDate:         document.getElementById('paidDate').value,
-        receiptFileName:  hasFile ? document.getElementById('receipt').files[0].name : 'N/A',
-        transactionId:    txn || 'N/A',
-        experience:       document.getElementById('experience').value,
-        playingStyle:     document.getElementById('playingStyle').value,
-        medical:          document.getElementById('medical').value || 'None'
+        jerseyFee: jt,
+        regFee: rf,
+        totalFee: gt,
+        paymentMode: mode,
+        paidDate: document.getElementById('paidDate').value,
+        receiptFileName: hasFile ? document.getElementById('receipt').files[0].name : 'N/A',
+        transactionId: txn || 'N/A',
+        experience: document.getElementById('experience').value,
+        playingStyle: document.getElementById('playingStyle').value,
+        medical: document.getElementById('medical').value || 'None'
     };
 
     try {
@@ -842,23 +809,22 @@ async function submitForm(e) {
             body: JSON.stringify(payload)
         });
         const result = await resp.json();
-
         if (result.status === 'success') {
+            /* Clear cached lookups so next search is fresh */
+            Object.keys(sessionStorage).forEach(function(k){ if (k.indexOf(LOOKUP_CACHE_PREFIX) === 0) sessionStorage.removeItem(k); });
+
             document.getElementById('loading').classList.remove('on');
             document.getElementById('formContent').style.display = 'none';
             document.getElementById('okMsg').classList.add('show');
             document.getElementById('okId').textContent = result.studentId;
             document.getElementById('sid').value = result.studentId;
             document.getElementById('idDisplay').textContent = result.studentId;
-
             document.getElementById('entityName').innerHTML = '<strong>YN Sports for Excellence</strong><br>(Subsidiary of WoW Fashion & Sports)';
             document.getElementById('centreNameDisplay').textContent = ACADEMY_NAME;
 
             let breakup = '';
             if (b !== 'pro' && r.rate && r.classes) {
-                breakup += 'Rate per class: ' + fmt(r.rate) + '<br>' +
-                           'Classes in period: ' + r.classes + '<br>' +
-                           'Coaching Fee (gross): ' + fmt(r.gross) + '<br>';
+                breakup += 'Rate per class: ' + fmt(r.rate) + '<br>Classes in period: ' + r.classes + '<br>Coaching Fee (gross): ' + fmt(r.gross) + '<br>';
             } else breakup += 'Coaching Fee (gross): ' + fmt(r.gross) + '<br>';
             if (r.seasonDisc > 0) breakup += 'Season Discount (5%): -' + fmt(r.seasonDisc) + '<br>';
             if (r.sibDisc > 0)    breakup += 'Sibling Discount (5%): -' + fmt(r.sibDisc) + '<br>';
@@ -869,7 +835,6 @@ async function submitForm(e) {
                 const prevName = BATCH[payload.previousBatch] ? BATCH[payload.previousBatch].name : payload.previousBatch;
                 breakup += '<br><em style="color:#2e7d32">🔄 Batch changed: ' + esc(prevName) + ' → ' + esc(BATCH[b] ? BATCH[b].name : b) + '</em>';
             }
-
             document.getElementById('feeBreakup').innerHTML = breakup;
             document.getElementById('finalTotal').textContent = fmt(gt);
         } else {
@@ -903,6 +868,13 @@ window.onload = function() {
     rebuildQuarterOptions([]);
     updateAll();
     togglePaymentFields();
+    /* Warm the backend index on first paint (silent) */
+    if (cfgOk()) {
+        setTimeout(function(){
+            fetch(SHEET_URL + '?action=stats&t=' + Date.now(), { method:'GET', redirect:'follow' })
+                .catch(function(){});
+        }, 1500);
+    }
 };
 
 document.getElementById('quarter').addEventListener('change', function() {
@@ -921,6 +893,15 @@ document.getElementById('oldStudent').addEventListener('change', updateAll);
 document.getElementById('extraJersey').addEventListener('change', updateAll);
 document.getElementById('needJersey').addEventListener('change', updateAll);
 document.getElementById('sname').addEventListener('input', updateAll);
+
+/* Auto-search when both fields are empty again */
+['checkEmail','checkMobile'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', function(){
+        const e = document.getElementById('checkEmail').value.trim();
+        const m = document.getElementById('checkMobile').value.trim();
+        if (!e && !m) document.getElementById('checkResult').innerHTML = '';
+    });
+});
 </script>
 </body>
 </html>
