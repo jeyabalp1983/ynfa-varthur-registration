@@ -56,7 +56,7 @@
         .consent-box{background:#fff;border:2px solid #d4af37;border-radius:.8rem;padding:1rem;margin-top:1rem}
         .renewal-banner{display:none;background:#e8f5e9;border:2px solid #2e7d32;border-radius:1rem;padding:1rem;margin-bottom:1rem;color:#1b5e20;font-size:.85rem;line-height:1.5}
 
-        /* BATCH CARDS */
+        /* BATCH CARDS — quarterly fee only */
         .batch-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-top:.3rem}
         .batch-card{background:#fffef7;border:2px solid #e0d4a8;border-radius:1rem;padding:.9rem 1rem;cursor:pointer;transition:all .18s ease;position:relative;user-select:none}
         .batch-card:hover{border-color:var(--orange);transform:translateY(-2px);box-shadow:0 4px 12px rgba(255,111,0,.15)}
@@ -65,8 +65,8 @@
         .batch-card .bc-name{font-weight:800;color:var(--blue);font-size:.95rem}
         .batch-card .bc-days{font-size:.78rem;color:#555;margin-top:.25rem}
         .batch-card .bc-time{font-size:.72rem;color:#888;margin-top:.1rem}
-        .batch-card .bc-rate{font-weight:800;color:var(--orange);font-size:1.05rem;margin-top:.55rem;letter-spacing:-.2px}
-        .batch-card .bc-rate small{font-weight:500;color:#888;font-size:.68rem}
+        .batch-card .bc-rate{font-weight:800;color:var(--orange);font-size:1.1rem;margin-top:.55rem;letter-spacing:-.3px}
+        .batch-card .bc-rate small{font-weight:600;color:#888;font-size:.7rem;letter-spacing:0}
         .batch-card .bc-note{font-size:.68rem;color:#888;margin-top:.2rem;font-weight:600}
         .batch-card .bc-badge{display:none;position:absolute;top:.5rem;left:.6rem;font-size:.58rem;padding:.15rem .5rem;border-radius:1rem;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:#fff}
         .batch-card.is-current .bc-badge{display:inline-block;background:#2e7d32}
@@ -247,8 +247,7 @@
 </div>
 <script>
 /* =====================================================================
-   YNFA VARTHUR — Final Front-end
-   Per-class engine (backend) + quarterly display (cards) + 7-day grace
+   YNFA VARTHUR — Final Front-end  (v2 · quarterly-only batch cards)
    ===================================================================== */
 
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzy92jO4IKIMV0JxoLunCdmqZ603l5mYdyK_7f17pIr2FrqQ8P58-61SKBy794xscv_Ug/exec';
@@ -268,7 +267,7 @@ const qd = {
     Q3:{s:'2027-01-01', e:'2027-03-31'}
 };
 
-/* Internal per-class rates — used only to compute quarterly totals. Never shown raw. */
+/* Internal per-class rates — NEVER shown directly. */
 const BATCH = {
     batch1:{days:[3,4,5],    rate:355, name:'Batch 1', daysTxt:'Wed, Thu, Fri'},
     batch2:{days:[5,6,0],    rate:355, name:'Batch 2', daysTxt:'Fri, Sat, Sun'},
@@ -290,7 +289,6 @@ let FOUND   = {};
 let _lookupAbort = null;
 let _lookupSeq = 0;
 
-/* Logo */
 const savedLogo = localStorage.getItem('ynfaVLogo');
 if (savedLogo) {
     document.getElementById('hlogo').src = savedLogo; document.getElementById('hlogo').classList.add('show');
@@ -364,50 +362,6 @@ function cf(q, b, sd, hs, paid) {
     return { f:net, e:end, gross:gross, seasonDisc:seasonDisc, sibDisc:sibDisc, classes:classes, rate:rate };
 }
 
-/* ================= BATCH CARD FEES (quarterly only) ================= */
-function getDisplayQuarter() {
-    const sel = document.getElementById('quarter').value;
-    if (sel && sel !== 'full') return sel;
-    if (RENEWAL) {
-        const paid = RENEWAL.quartersPaid || [];
-        const first = ['Q1','Q2','Q3'].filter(function(k){ return paid.indexOf(k) === -1; });
-        return first[0] || 'Q1';
-    }
-    return 'Q1';
-}
-
-function computeBatchCardDisplay(batchKey) {
-    const sel = document.getElementById('quarter').value;
-    if (batchKey === 'pro') {
-        return { fee: BATCH.pro.season, note: 'Full season package' };
-    }
-    if (sel === 'full') {
-        const paid = RENEWAL ? (RENEWAL.quartersPaid || []) : [];
-        const keys = ['Q1','Q2','Q3'].filter(function(k){ return paid.indexOf(k) === -1; });
-        let total = 0, classes = 0;
-        keys.forEach(function(k){
-            const r = quarterFee(k, batchKey, qd[k].s);
-            total += r.f; classes += r.classes;
-        });
-        const disc = keys.length > 1 ? Math.round(total * 0.05) : 0;
-        return { fee: total - disc, note: classes + ' classes · Full Season' + (disc ? ' (5% off)' : '') };
-    }
-    const q = getDisplayQuarter();
-    const r = quarterFee(q, batchKey, qd[q].s);
-    return { fee: r.f, note: r.classes + ' classes · ' + q };
-}
-
-function updateBatchCardFees() {
-    ['batch1','batch2','batch3','pro'].forEach(function(b){
-        const rateEl = document.getElementById('bcRate_' + b);
-        const noteEl = document.getElementById('bcNote_' + b);
-        if (!rateEl || !noteEl) return;
-        const d = computeBatchCardDisplay(b);
-        rateEl.innerHTML = fmt(d.fee) + ' <small>/ quarter</small>';
-        noteEl.textContent = d.note;
-    });
-}
-
 /* ================= QUARTER DROPDOWN ================= */
 function rebuildQuarterOptions(paid) {
     paid = paid || [];
@@ -429,11 +383,57 @@ function rebuildQuarterOptions(paid) {
     }).join('');
 }
 
-/* ================= BATCH UI ================= */
+/* ================= BATCH UI — QUARTERLY FEE ONLY ================= */
+function getDisplayQuarter() {
+    const sel = document.getElementById('quarter').value;
+    if (sel && sel !== 'full') return sel;
+    if (RENEWAL) {
+        const paid = RENEWAL.quartersPaid || [];
+        const first = ['Q1','Q2','Q3'].filter(function(k){ return paid.indexOf(k) === -1; });
+        return first[0] || 'Q1';
+    }
+    return 'Q1';
+}
+
+function updateBatchCardFees() {
+    const sel = document.getElementById('quarter').value;
+    const q = getDisplayQuarter();
+
+    ['batch1','batch2','batch3','pro'].forEach(function(b){
+        const rateEl = document.getElementById('bcRate_' + b);
+        const noteEl = document.getElementById('bcNote_' + b);
+        if (!rateEl || !noteEl) return;
+
+        if (b === 'pro') {
+            rateEl.innerHTML = fmt(BATCH.pro.season) + ' <small>/ season</small>';
+            noteEl.textContent = 'All 3 quarters · 5 days / week';
+            return;
+        }
+
+        if (sel === 'full') {
+            const paid = RENEWAL ? (RENEWAL.quartersPaid || []) : [];
+            const keys = ['Q1','Q2','Q3'].filter(function(k){ return paid.indexOf(k) === -1; });
+            let total = 0, classes = 0;
+            keys.forEach(function(k){
+                const r = quarterFee(k, b, qd[k].s);
+                total += r.f; classes += r.classes;
+            });
+            const disc = keys.length > 1 ? Math.round(total * 0.05) : 0;
+            rateEl.innerHTML = fmt(total - disc) + ' <small>/ season</small>';
+            noteEl.textContent = classes + ' classes' + (disc ? ' · 5% off applied' : '');
+        } else {
+            const r = quarterFee(q, b, qd[q].s);
+            rateEl.innerHTML = fmt(r.f) + ' <small>/ ' + q + '</small>';
+            noteEl.textContent = r.classes + ' classes · ' + q + ' 2026' + (q === 'Q3' ? '–27' : '');
+        }
+    });
+}
+
 function selectBatch(v) {
     document.getElementById('batchType').value = v;
     document.querySelectorAll('.batch-card').forEach(function(c){ c.classList.toggle('selected', c.dataset.batch === v); });
-    updateBatchCards(); updateAll();
+    updateBatchCards();
+    updateAll();
 }
 function applyBatchUI(v) {
     document.getElementById('batchType').value = v || '';
@@ -979,8 +979,14 @@ window.onload = function() {
     document.getElementById('sid').value = '---';
     document.getElementById('idDisplay').textContent = 'YNFAV------';
     rebuildQuarterOptions([]);
+
+    /* Pre-select Q1 so batch cards show quarterly fees immediately */
+    document.getElementById('quarter').value = 'Q1';
+    document.getElementById('startDate').value = qd.Q1.s;
+
     updateAll();
     togglePaymentFields();
+
     if (cfgOk() && WARM_ON_LOAD) {
         setTimeout(function(){
             fetch(SHEET_URL + '?action=warm&t=' + Date.now(), { method:'GET', redirect:'follow', cache:'no-store' })
