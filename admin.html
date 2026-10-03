@@ -12,8 +12,9 @@
 <div class="container"><h1>⚽ YNFA (VARTHUR)</h1><h2>🔧 Admin Panel</h2>
     <div class="section"><h3>🖼️ Logo</h3><div class="upload-circle" onclick="document.getElementById('li').click()"><span id="lp">⚽</span><img id="lv" src="" style="display:none"><div class="upload-hint">📷</div></div><input type="file" id="li" accept="image/*" style="display:none" onchange="pl(event)"><div class="btn-center"><button class="btn btn-green" onclick="sl()">💾 Save</button><button class="btn btn-red" onclick="rl()">🔄 Remove</button></div><div class="msg" id="lm">✅ Saved!</div></div>
     <div class="section"><h3>📷 Scanner</h3><div class="scanner-box" id="sb" onclick="document.getElementById('si').click()"><div id="sp"><span style="font-size:2.5rem">📱</span><p style="font-weight:600">Click to Upload</p><button type="button" class="btn btn-blue">📁 Choose</button></div><input type="file" id="si" accept="image/*" style="display:none" onchange="ps(event)"><div class="scanner-preview" id="sv"><img id="svi" src=""><p id="sfn" style="font-size:.8rem;color:#2e7d32;font-weight:600;margin-top:.3rem"></p><button class="btn btn-gold" onclick="event.stopPropagation();document.getElementById('si').click()">🔄</button><button class="btn btn-red" onclick="event.stopPropagation();rs()">✕</button></div></div><div class="btn-center"><button class="btn btn-green" onclick="ss()">💾 Save</button><button class="btn btn-red" onclick="rs()">🔄 Remove</button></div><div class="msg" id="sm">✅ Saved!</div></div>
-    <div class="section"><h3>⚙️ Settings</h3><label>UPI ID:</label><input type="text" id="upi" value="0798121A0079936.BQR@kotak"><label>Phone:</label><input type="text" id="ph" value="+91-9606743437"><label>Email:</label><input type="text" id="em" value="ynsportsforexcellence@gmail.com"><label>Address:</label><input type="text" id="ad" value="Varthur, Bangalore - 560087"><div class="btn-center"><button class="btn btn-blue" onclick="sav()">💾 Save</button></div><div class="msg" id="stm">✅ Saved!</div></div>
+    <div class="section"><h3>⚙️ Settings</h3><label>UPI ID:</label><input type="text" id="upi" value="0798121A0079936.BQR@kotak"><label>Phone:</label><input type="text" id="ph" value="+91-9606743437"><label>Email:</label><input type="text" id="em" value="ynsportsforexcellence@gmail.com"><label>Address:</label><input type="text" id="ad" value="Varthur, Bangalore - 560087"><label>Apps Script URL (backend):</label><input type="text" id="api" placeholder="https://script.google.com/macros/s/.../exec"><div class="btn-center"><button class="btn btn-blue" onclick="sav()">💾 Save</button></div><div class="msg" id="stm">✅ Saved!</div></div>
     <div class="section"><h3>👕 Jersey</h3><div class="row"><span>New:</span><span style="color:#c41e3a;font-weight:700">Mandatory ₹1000</span></div><div class="row"><span>Old Students:</span><label style="display:flex;align-items:center;gap:.3rem;margin:0"><input type="checkbox" id="oj" checked onchange="sj()"><span style="color:#2e7d32;font-weight:700">Optional</span></label></div></div>
+    <div class="section"><h3>⚡ Backend Cache</h3><p style="font-size:.8rem;color:#666;margin-bottom:.5rem">Force the backend to rebuild its student index. Use after bulk edits in the sheet.</p><div class="btn-center"><button class="btn btn-blue" onclick="clearCache()">🧹 Clear Server Cache</button></div><div class="msg" id="ccm">✅ Cache cleared</div></div>
     <div class="section"><h3>🔗 Link</h3><div class="link-box" id="fl">https://jeyabalp1983.github.io/ynfa-varthur-registration/</div><div class="btn-center"><button class="btn btn-gold" onclick="navigator.clipboard.writeText(document.getElementById('fl').textContent.trim()).then(()=>alert('✅ Copied!'))">📋 Copy</button></div></div>
 </div>
 <script>
@@ -28,6 +29,7 @@ window.onload=function(){
     if(t.email)document.getElementById('em').value=t.email;
     if(t.address)document.getElementById('ad').value=t.address;
     if(t.oldJerseyOptional!==undefined)document.getElementById('oj').checked=t.oldJerseyOptional;
+    if(t.backendUrl)document.getElementById('api').value=t.backendUrl;
 };
 function pl(e){const f=e.target.files[0];if(!f)return;if(f.size>2*1024*1024){alert('Max 2MB!');return}const r=new FileReader();r.onload=function(ev){document.getElementById('lv').src=ev.target.result;document.getElementById('lv').style.display='block';document.getElementById('lp').style.display='none'};r.readAsDataURL(f)}
 function sl(){const i=document.getElementById('lv');if(!i.src||i.style.display==='none'){alert('Choose logo!');return}localStorage.setItem('ynfaVLogo',i.src);const m=document.getElementById('lm');m.classList.add('show');setTimeout(()=>m.classList.remove('show'),3000)}
@@ -35,8 +37,19 @@ function rl(){localStorage.removeItem('ynfaVLogo');document.getElementById('lv')
 function ps(e){e.stopPropagation();const f=e.target.files[0];if(!f)return;if(['image/jpeg','image/png','image/webp'].indexOf(f.type)===-1){alert('JPG/PNG/WebP!');return}if(f.size>5*1024*1024){alert('Max 5MB!');return}const r=new FileReader();r.onload=function(ev){document.getElementById('svi').src=ev.target.result;document.getElementById('sfn').textContent='✅ '+f.name;document.getElementById('sv').style.display='block';document.getElementById('sp').style.display='none'};r.readAsDataURL(f)}
 function ss(){const i=document.getElementById('svi');if(!i.src||document.getElementById('sv').style.display==='none'){alert('Upload first!');return}localStorage.setItem('ynfaVScanner',i.src);const m=document.getElementById('sm');m.classList.add('show');setTimeout(()=>m.classList.remove('show'),3000)}
 function rs(){localStorage.removeItem('ynfaVScanner');document.getElementById('svi').src='';document.getElementById('sv').style.display='none';document.getElementById('sp').style.display='block';document.getElementById('si').value=''}
-function sav(){const t={upiId:document.getElementById('upi').value,phone:document.getElementById('ph').value,email:document.getElementById('em').value,address:document.getElementById('ad').value,oldJerseyOptional:document.getElementById('oj').checked};localStorage.setItem('ynfaVSettings',JSON.stringify(t));const m=document.getElementById('stm');m.classList.add('show');setTimeout(()=>m.classList.remove('show'),3000)}
+function sav(){const t={upiId:document.getElementById('upi').value,phone:document.getElementById('ph').value,email:document.getElementById('em').value,address:document.getElementById('ad').value,oldJerseyOptional:document.getElementById('oj').checked,backendUrl:document.getElementById('api').value.trim()};localStorage.setItem('ynfaVSettings',JSON.stringify(t));const m=document.getElementById('stm');m.classList.add('show');setTimeout(()=>m.classList.remove('show'),3000)}
 function sj(){const t=JSON.parse(localStorage.getItem('ynfaVSettings')||'{}');t.oldJerseyOptional=document.getElementById('oj').checked;localStorage.setItem('ynfaVSettings',JSON.stringify(t))}
+async function clearCache(){
+    const t=JSON.parse(localStorage.getItem('ynfaVSettings')||'{}');
+    const url=(t.backendUrl||document.getElementById('api').value||'').trim();
+    if(!url||url.indexOf('/exec')===-1){alert('Set your Apps Script /exec URL in the field above first.');return}
+    try{
+        const r=await fetch(url+'?action=clear&t='+Date.now());
+        const j=await r.json();
+        if(j.status==='success'){const m=document.getElementById('ccm');m.classList.add('show');setTimeout(()=>m.classList.remove('show'),3000)}
+        else alert('Server: '+(j.message||'failed'));
+    }catch(e){alert('Error: '+e.message)}
+}
 </script>
 </body>
 </html>
