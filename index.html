@@ -55,8 +55,6 @@
         .check-section{background:#e3f2fd;border-radius:1rem;padding:1rem;border:1px solid #2196F3;margin-bottom:1rem}
         .consent-box{background:#fff;border:2px solid #d4af37;border-radius:.8rem;padding:1rem;margin-top:1rem}
         .renewal-banner{display:none;background:#e8f5e9;border:2px solid #2e7d32;border-radius:1rem;padding:1rem;margin-bottom:1rem;color:#1b5e20;font-size:.85rem;line-height:1.5}
-
-        /* BATCH CARDS — quarterly fee only */
         .batch-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-top:.3rem}
         .batch-card{background:#fffef7;border:2px solid #e0d4a8;border-radius:1rem;padding:.9rem 1rem;cursor:pointer;transition:all .18s ease;position:relative;user-select:none}
         .batch-card:hover{border-color:var(--orange);transform:translateY(-2px);box-shadow:0 4px 12px rgba(255,111,0,.15)}
@@ -73,8 +71,6 @@
         .batch-card.is-current .bc-badge::after{content:'Current'}
         .batch-card.is-changed .bc-badge{display:inline-block;background:#ff6f00}
         .batch-card.is-changed .bc-badge::after{content:'New'}
-
-        /* LEDGER */
         .ledger{background:linear-gradient(180deg,#fffef7,#fff8e7);border:2px solid var(--gold);border-radius:1.2rem;overflow:hidden;margin-top:.3rem;box-shadow:0 4px 14px rgba(0,0,0,.06)}
         .lg-header{background:linear-gradient(90deg,var(--blue),#283593);color:#ffd966;padding:.7rem 1rem;font-weight:800;font-size:.85rem;display:flex;justify-content:space-between;align-items:center;letter-spacing:.5px}
         .lg-mode{background:var(--orange);color:#fff;padding:.2rem .7rem;border-radius:1rem;font-size:.65rem;letter-spacing:.3px;text-transform:uppercase}
@@ -88,13 +84,11 @@
         .lg-total{display:flex;justify-content:space-between;align-items:center;padding:.8rem 1rem;background:linear-gradient(90deg,#fff8e7,#ffe9cc);border-top:2px dashed var(--gold);font-weight:800;color:var(--blue);font-size:.85rem;letter-spacing:.3px}
         .lg-total b{color:#e65100;font-size:1.35rem}
         .lg-note{padding:.4rem 1rem .7rem;font-size:.7rem;color:#888;line-height:1.35}
-
         .skeleton{background:#e3f2fd;border-radius:.5rem;padding:1rem;margin-top:.5rem}
         .sk-line{height:14px;background:linear-gradient(90deg,#d0e3f5 25%,#e3f2fd 50%,#d0e3f5 75%);background-size:200% 100%;animation:shine 1.2s infinite;border-radius:4px;margin:.4rem 0}
         .sk-line.w40{width:40%}.sk-line.w60{width:60%}.sk-line.w80{width:80%}
         @keyframes shine{0%{background-position:200% 0}100%{background-position:-200% 0}}
         .cache-badge{font-size:.65rem;color:#2e7d32;font-weight:600;margin-left:.3rem}
-
         @media(max-width:600px){.r2,.r3{grid-template-columns:1fr}.batch-grid{grid-template-columns:1fr}.qr-container img{width:180px!important;height:180px!important}}
     </style>
 </head>
@@ -158,38 +152,10 @@
             <div class="inp">
                 <label>Choose Batch <span class="req">*</span> <span id="batchHint" style="font-weight:400;color:#888;font-size:.72rem"></span></label>
                 <div class="batch-grid" id="batchGrid">
-                    <div class="batch-card" data-batch="batch1" onclick="selectBatch('batch1')">
-                        <span class="bc-badge"></span>
-                        <div class="bc-name">Batch 1</div>
-                        <div class="bc-days">Wed · Thu · Fri</div>
-                        <div class="bc-time">5:00 – 6:30 PM</div>
-                        <div class="bc-rate" id="bcRate_batch1">—</div>
-                        <div class="bc-note" id="bcNote_batch1">Select quarter</div>
-                    </div>
-                    <div class="batch-card" data-batch="batch2" onclick="selectBatch('batch2')">
-                        <span class="bc-badge"></span>
-                        <div class="bc-name">Batch 2</div>
-                        <div class="bc-days">Fri · Sat · Sun</div>
-                        <div class="bc-time">5:00 – 6:30 PM</div>
-                        <div class="bc-rate" id="bcRate_batch2">—</div>
-                        <div class="bc-note" id="bcNote_batch2">Select quarter</div>
-                    </div>
-                    <div class="batch-card" data-batch="batch3" onclick="selectBatch('batch3')">
-                        <span class="bc-badge"></span>
-                        <div class="bc-name">Batch 3</div>
-                        <div class="bc-days">Sat · Sun</div>
-                        <div class="bc-time">5:00 – 6:30 PM</div>
-                        <div class="bc-rate" id="bcRate_batch3">—</div>
-                        <div class="bc-note" id="bcNote_batch3">Select quarter</div>
-                    </div>
-                    <div class="batch-card" data-batch="pro" onclick="selectBatch('pro')">
-                        <span class="bc-badge"></span>
-                        <div class="bc-name">Pro Batch</div>
-                        <div class="bc-days">Wed – Sun · 5 days</div>
-                        <div class="bc-time">6:30 – 8:00 PM · 8+ yrs</div>
-                        <div class="bc-rate" id="bcRate_pro">₹47,500 <small>/ season</small></div>
-                        <div class="bc-note" id="bcNote_pro">Full season package</div>
-                    </div>
+                    <div class="batch-card" data-batch="batch1" onclick="selectBatch('batch1')"><span class="bc-badge"></span><div class="bc-name">Batch 1</div><div class="bc-days">Wed · Thu · Fri</div><div class="bc-time">5:00 – 6:30 PM</div><div class="bc-rate" id="bcRate_batch1">—</div><div class="bc-note" id="bcNote_batch1">Select quarter</div></div>
+                    <div class="batch-card" data-batch="batch2" onclick="selectBatch('batch2')"><span class="bc-badge"></span><div class="bc-name">Batch 2</div><div class="bc-days">Fri · Sat · Sun</div><div class="bc-time">5:00 – 6:30 PM</div><div class="bc-rate" id="bcRate_batch2">—</div><div class="bc-note" id="bcNote_batch2">Select quarter</div></div>
+                    <div class="batch-card" data-batch="batch3" onclick="selectBatch('batch3')"><span class="bc-badge"></span><div class="bc-name">Batch 3</div><div class="bc-days">Sat · Sun</div><div class="bc-time">5:00 – 6:30 PM</div><div class="bc-rate" id="bcRate_batch3">—</div><div class="bc-note" id="bcNote_batch3">Select quarter</div></div>
+                    <div class="batch-card" data-batch="pro" onclick="selectBatch('pro')"><span class="bc-badge"></span><div class="bc-name">Pro Batch</div><div class="bc-days">Wed – Sun · 5 days</div><div class="bc-time">6:30 – 8:00 PM · 8+ yrs</div><div class="bc-rate" id="bcRate_pro">₹47,500 <small>/ season</small></div><div class="bc-note" id="bcNote_pro">Full season package</div></div>
                 </div>
                 <select id="batchType" required style="display:none"><option value="">--</option><option value="batch1">Batch 1</option><option value="batch2">Batch 2</option><option value="batch3">Batch 3</option><option value="pro">Pro</option></select>
             </div>
@@ -206,10 +172,7 @@
 
             <span class="sec">💼 PAYMENT SUMMARY</span>
             <div class="ledger" id="ledger">
-                <div class="lg-header">
-                    <span>💼 PAYMENT SUMMARY</span>
-                    <span class="lg-mode" id="lgMode">New Registration</span>
-                </div>
+                <div class="lg-header"><span>💼 PAYMENT SUMMARY</span><span class="lg-mode" id="lgMode">New Registration</span></div>
                 <div class="lg-body">
                     <div class="lg-row"><span>Student</span><b id="lgStudent">—</b></div>
                     <div class="lg-row"><span>Batch</span><b id="lgBatch">—</b></div>
@@ -247,7 +210,7 @@
 </div>
 <script>
 /* =====================================================================
-   YNFA VARTHUR — Final Front-end  (v2 · quarterly-only batch cards)
+   YNFA VARTHUR — Final Front-end  (v3 · fixed quarter end dates)
    ===================================================================== */
 
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzy92jO4IKIMV0JxoLunCdmqZ603l5mYdyK_7f17pIr2FrqQ8P58-61SKBy794xscv_Ug/exec';
@@ -267,7 +230,6 @@ const qd = {
     Q3:{s:'2027-01-01', e:'2027-03-31'}
 };
 
-/* Internal per-class rates — NEVER shown directly. */
 const BATCH = {
     batch1:{days:[3,4,5],    rate:355, name:'Batch 1', daysTxt:'Wed, Thu, Fri'},
     batch2:{days:[5,6,0],    rate:355, name:'Batch 2', daysTxt:'Fri, Sat, Sun'},
@@ -302,6 +264,24 @@ function normMobile(s){ return String(s || '').replace(/\D/g, '').slice(-10); }
 function cfgOk(){ return SHEET_URL && SHEET_URL.indexOf('YOUR_APPS_SCRIPT_URL') === -1; }
 function fmt(n){ return '₹' + (Number(n)||0).toLocaleString('en-IN'); }
 
+/* =====================================================================
+   FIXED QUARTER END DATES — always the same, regardless of start date
+   Q1 → 30 Sep 2026 · Q2 → 31 Dec 2026 · Q3 → 31 Mar 2027
+   ===================================================================== */
+function getQuarterEndDate(q) {
+    if (q === 'Q1')   return '2026-09-30';
+    if (q === 'Q2')   return '2026-12-31';
+    if (q === 'Q3')   return '2027-03-31';
+    if (q === 'full') return '2027-03-31';
+    return '';
+}
+
+function formatEndDate(q) {
+    const d = getQuarterEndDate(q);
+    if (!d) return '';
+    return new Date(d).toLocaleDateString('en-IN', { year:'numeric', month:'long', day:'numeric' });
+}
+
 /* ================= FEE ENGINE ================= */
 function quarterFee(q, b, sd) {
     const x = qd[q];
@@ -309,7 +289,7 @@ function quarterFee(q, b, sd) {
     if (b === 'pro') return { f: BATCH.pro.season, e:'2027-03-31', classes:0, rate:0 };
     const rate = (BATCH[b] && BATCH[b].rate) || 355;
     const qs = new Date(x.s), qe = new Date(x.e), jd = new Date(sd);
-    if (jd > qe) return { f:0, e:'', classes:0, rate:rate };
+    if (jd > qe) return { f:0, e: x.e, classes:0, rate:rate };   // <-- keep x.e so end date stays valid
     const effStart = jd > qs ? jd : qs;
     const days = BATCH[b].days;
     let totalClasses = 0;
@@ -383,7 +363,7 @@ function rebuildQuarterOptions(paid) {
     }).join('');
 }
 
-/* ================= BATCH UI — QUARTERLY FEE ONLY ================= */
+/* ================= BATCH UI ================= */
 function getDisplayQuarter() {
     const sel = document.getElementById('quarter').value;
     if (sel && sel !== 'full') return sel;
@@ -746,7 +726,9 @@ function updateAll() {
     const gt = r.f + jt + rf;
 
     document.getElementById('regDisp').textContent = 'Reg: ' + fmt(rf);
-    document.getElementById('endDate').value = r.e ? new Date(r.e).toLocaleDateString('en-IN', { year:'numeric', month:'long', day:'numeric' }) : '';
+
+    /* FIXED end date — always the quarter's fixed end, independent of start date */
+    document.getElementById('endDate').value = formatEndDate(q);
 
     updateBatchCards();
     updateLedger(r, jt, rf, gt, b, q, sd);
@@ -763,9 +745,15 @@ function updateLedger(r, jt, rf, gt, b, q, sd) {
     document.getElementById('lgBatch').textContent = batchTxt;
     document.getElementById('lgQuarter').textContent = q ? (q === 'full' ? 'Full Season (Q1+Q2+Q3)' : q) : '—';
 
+    /* Period uses fixed quarter end date */
+    const endStr = getQuarterEndDate(q);
     let periodTxt = '—';
-    if (r.e && sd) periodTxt = new Date(sd).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) +
-        ' → ' + new Date(r.e).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+    if (endStr && sd) {
+        periodTxt = new Date(sd).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) +
+            ' → ' + new Date(endStr).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+    } else if (endStr) {
+        periodTxt = '→ ' + new Date(endStr).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+    }
     document.getElementById('lgPeriod').textContent = periodTxt;
 
     document.getElementById('lgGross').textContent   = fmt(r.gross || 0);
@@ -902,7 +890,7 @@ async function submitForm(e) {
         ratePerClass: r.rate || 0,
         classesCount: r.classes || 0,
         startDate: sd,
-        endDate: r.e,
+        endDate: getQuarterEndDate(q),   /* FIXED end date */
         coachingFee: r.f,
         grossCoaching: r.gross,
         seasonDiscount: r.seasonDisc,
@@ -979,14 +967,10 @@ window.onload = function() {
     document.getElementById('sid').value = '---';
     document.getElementById('idDisplay').textContent = 'YNFAV------';
     rebuildQuarterOptions([]);
-
-    /* Pre-select Q1 so batch cards show quarterly fees immediately */
     document.getElementById('quarter').value = 'Q1';
     document.getElementById('startDate').value = qd.Q1.s;
-
     updateAll();
     togglePaymentFields();
-
     if (cfgOk() && WARM_ON_LOAD) {
         setTimeout(function(){
             fetch(SHEET_URL + '?action=warm&t=' + Date.now(), { method:'GET', redirect:'follow', cache:'no-store' })
