@@ -55,22 +55,26 @@
         .check-section{background:#e3f2fd;border-radius:1rem;padding:1rem;border:1px solid #2196F3;margin-bottom:1rem}
         .consent-box{background:#fff;border:2px solid #d4af37;border-radius:.8rem;padding:1rem;margin-top:1rem}
         .renewal-banner{display:none;background:#e8f5e9;border:2px solid #2e7d32;border-radius:1rem;padding:1rem;margin-bottom:1rem;color:#1b5e20;font-size:.85rem;line-height:1.5}
+
+        /* BATCH CARDS */
         .batch-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-top:.3rem}
-        .batch-card{background:#fffef7;border:2px solid #e0d4a8;border-radius:1rem;padding:.85rem;cursor:pointer;transition:all .18s ease;position:relative;user-select:none}
+        .batch-card{background:#fffef7;border:2px solid #e0d4a8;border-radius:1rem;padding:.9rem 1rem;cursor:pointer;transition:all .18s ease;position:relative;user-select:none}
         .batch-card:hover{border-color:var(--orange);transform:translateY(-2px);box-shadow:0 4px 12px rgba(255,111,0,.15)}
         .batch-card.selected{border-color:var(--orange);background:linear-gradient(135deg,#fff8e7,#ffe9cc);box-shadow:0 4px 14px rgba(255,111,0,.25)}
         .batch-card.selected::after{content:'✓';position:absolute;top:.5rem;right:.6rem;background:var(--orange);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.8rem}
-        .batch-card .bc-name{font-weight:800;color:var(--blue);font-size:.92rem}
+        .batch-card .bc-name{font-weight:800;color:var(--blue);font-size:.95rem}
         .batch-card .bc-days{font-size:.78rem;color:#555;margin-top:.25rem}
         .batch-card .bc-time{font-size:.72rem;color:#888;margin-top:.1rem}
-        .batch-card .bc-rate{font-weight:800;color:var(--orange);font-size:.95rem;margin-top:.45rem}
-        .batch-card .bc-rate small{font-weight:500;color:#888;font-size:.65rem}
-        .batch-card .bc-note{font-size:.65rem;color:#888;margin-top:.15rem}
+        .batch-card .bc-rate{font-weight:800;color:var(--orange);font-size:1.05rem;margin-top:.55rem;letter-spacing:-.2px}
+        .batch-card .bc-rate small{font-weight:500;color:#888;font-size:.68rem}
+        .batch-card .bc-note{font-size:.68rem;color:#888;margin-top:.2rem;font-weight:600}
         .batch-card .bc-badge{display:none;position:absolute;top:.5rem;left:.6rem;font-size:.58rem;padding:.15rem .5rem;border-radius:1rem;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:#fff}
         .batch-card.is-current .bc-badge{display:inline-block;background:#2e7d32}
         .batch-card.is-current .bc-badge::after{content:'Current'}
         .batch-card.is-changed .bc-badge{display:inline-block;background:#ff6f00}
         .batch-card.is-changed .bc-badge::after{content:'New'}
+
+        /* LEDGER */
         .ledger{background:linear-gradient(180deg,#fffef7,#fff8e7);border:2px solid var(--gold);border-radius:1.2rem;overflow:hidden;margin-top:.3rem;box-shadow:0 4px 14px rgba(0,0,0,.06)}
         .lg-header{background:linear-gradient(90deg,var(--blue),#283593);color:#ffd966;padding:.7rem 1rem;font-weight:800;font-size:.85rem;display:flex;justify-content:space-between;align-items:center;letter-spacing:.5px}
         .lg-mode{background:var(--orange);color:#fff;padding:.2rem .7rem;border-radius:1rem;font-size:.65rem;letter-spacing:.3px;text-transform:uppercase}
@@ -84,12 +88,13 @@
         .lg-total{display:flex;justify-content:space-between;align-items:center;padding:.8rem 1rem;background:linear-gradient(90deg,#fff8e7,#ffe9cc);border-top:2px dashed var(--gold);font-weight:800;color:var(--blue);font-size:.85rem;letter-spacing:.3px}
         .lg-total b{color:#e65100;font-size:1.35rem}
         .lg-note{padding:.4rem 1rem .7rem;font-size:.7rem;color:#888;line-height:1.35}
-        /* Skeleton loader */
+
         .skeleton{background:#e3f2fd;border-radius:.5rem;padding:1rem;margin-top:.5rem}
         .sk-line{height:14px;background:linear-gradient(90deg,#d0e3f5 25%,#e3f2fd 50%,#d0e3f5 75%);background-size:200% 100%;animation:shine 1.2s infinite;border-radius:4px;margin:.4rem 0}
         .sk-line.w40{width:40%}.sk-line.w60{width:60%}.sk-line.w80{width:80%}
         @keyframes shine{0%{background-position:200% 0}100%{background-position:-200% 0}}
         .cache-badge{font-size:.65rem;color:#2e7d32;font-weight:600;margin-left:.3rem}
+
         @media(max-width:600px){.r2,.r3{grid-template-columns:1fr}.batch-grid{grid-template-columns:1fr}.qr-container img{width:180px!important;height:180px!important}}
     </style>
 </head>
@@ -145,21 +150,49 @@
             <div style="background:#fff8e1;border-radius:1rem;padding:.8rem;border:2px solid #ff9800"><label style="display:flex;align-items:center;gap:.5rem;font-weight:700;color:#e65100"><input type="checkbox" id="hasSibling" onchange="toggleSibling()"> 👨‍👩‍👧‍👦 Sibling? (5% Discount)</label><div id="siblingSection" style="display:none;margin-top:.8rem"><div class="sibling-box"><div class="r2"><div class="inp"><label>Sibling Name <span class="req">*</span></label><input type="text" id="siblingName" placeholder="Enter sibling's full name"></div><div class="inp"><label>Sibling Age</label><input type="number" id="siblingAge" min="5" max="25" placeholder="Years"></div></div><div class="inp" style="margin-top:.3rem"><label>Existing Student ID (if already enrolled)</label><input type="text" id="siblingId" placeholder="e.g., YNFAV000003 (optional)"></div></div><div class="sibling-discount">🎉 5% Sibling Discount Applied!</div></div></div>
             <div style="display:flex;align-items:center;gap:1rem;background:#e6f0da;padding:.5rem 1rem;border-radius:2rem"><label style="margin:0"><input type="checkbox" id="oldStudent" onchange="updateAll()"> ⭐ Old Student (Reg. fee already paid – waiver)</label><span id="regDisp" style="font-weight:700;margin-left:auto">Reg: ₹500</span></div>
 
+            <span class="sec">📅 QUARTER & DATES</span>
+            <div class="inp"><label>Quarter <span class="req">*</span></label><select id="quarter" required></select></div>
+            <div class="r2"><div class="inp"><label>Start Date <span class="req">*</span></label><input type="date" id="startDate" required onchange="updateAll()"></div><div class="inp"><label>End Date</label><input type="text" id="endDate" readonly style="background:#f5f5f5;font-weight:600;color:#ff6f00"></div></div>
+
             <span class="sec">⚽ BATCH SELECTION</span>
             <div class="inp">
                 <label>Choose Batch <span class="req">*</span> <span id="batchHint" style="font-weight:400;color:#888;font-size:.72rem"></span></label>
                 <div class="batch-grid" id="batchGrid">
-                    <div class="batch-card" data-batch="batch1" onclick="selectBatch('batch1')"><span class="bc-badge"></span><div class="bc-name">Batch 1</div><div class="bc-days">Wed · Thu · Fri</div><div class="bc-time">5:00 – 6:30 PM</div><div class="bc-rate">₹355 <small>/ class</small></div><div class="bc-note">~12 classes / month</div></div>
-                    <div class="batch-card" data-batch="batch2" onclick="selectBatch('batch2')"><span class="bc-badge"></span><div class="bc-name">Batch 2</div><div class="bc-days">Fri · Sat · Sun</div><div class="bc-time">5:00 – 6:30 PM</div><div class="bc-rate">₹355 <small>/ class</small></div><div class="bc-note">~12 classes / month</div></div>
-                    <div class="batch-card" data-batch="batch3" onclick="selectBatch('batch3')"><span class="bc-badge"></span><div class="bc-name">Batch 3</div><div class="bc-days">Sat · Sun</div><div class="bc-time">5:00 – 6:30 PM</div><div class="bc-rate">₹469 <small>/ class</small></div><div class="bc-note">~8 classes / month</div></div>
-                    <div class="batch-card" data-batch="pro" onclick="selectBatch('pro')"><span class="bc-badge"></span><div class="bc-name">Pro Batch</div><div class="bc-days">Wed – Sun · 5 days</div><div class="bc-time">6:30 – 8:00 PM · 8+ yrs</div><div class="bc-rate">₹47,500 <small>/ season</small></div><div class="bc-note">Full season package</div></div>
+                    <div class="batch-card" data-batch="batch1" onclick="selectBatch('batch1')">
+                        <span class="bc-badge"></span>
+                        <div class="bc-name">Batch 1</div>
+                        <div class="bc-days">Wed · Thu · Fri</div>
+                        <div class="bc-time">5:00 – 6:30 PM</div>
+                        <div class="bc-rate" id="bcRate_batch1">—</div>
+                        <div class="bc-note" id="bcNote_batch1">Select quarter</div>
+                    </div>
+                    <div class="batch-card" data-batch="batch2" onclick="selectBatch('batch2')">
+                        <span class="bc-badge"></span>
+                        <div class="bc-name">Batch 2</div>
+                        <div class="bc-days">Fri · Sat · Sun</div>
+                        <div class="bc-time">5:00 – 6:30 PM</div>
+                        <div class="bc-rate" id="bcRate_batch2">—</div>
+                        <div class="bc-note" id="bcNote_batch2">Select quarter</div>
+                    </div>
+                    <div class="batch-card" data-batch="batch3" onclick="selectBatch('batch3')">
+                        <span class="bc-badge"></span>
+                        <div class="bc-name">Batch 3</div>
+                        <div class="bc-days">Sat · Sun</div>
+                        <div class="bc-time">5:00 – 6:30 PM</div>
+                        <div class="bc-rate" id="bcRate_batch3">—</div>
+                        <div class="bc-note" id="bcNote_batch3">Select quarter</div>
+                    </div>
+                    <div class="batch-card" data-batch="pro" onclick="selectBatch('pro')">
+                        <span class="bc-badge"></span>
+                        <div class="bc-name">Pro Batch</div>
+                        <div class="bc-days">Wed – Sun · 5 days</div>
+                        <div class="bc-time">6:30 – 8:00 PM · 8+ yrs</div>
+                        <div class="bc-rate" id="bcRate_pro">₹47,500 <small>/ season</small></div>
+                        <div class="bc-note" id="bcNote_pro">Full season package</div>
+                    </div>
                 </div>
                 <select id="batchType" required style="display:none"><option value="">--</option><option value="batch1">Batch 1</option><option value="batch2">Batch 2</option><option value="batch3">Batch 3</option><option value="pro">Pro</option></select>
             </div>
-
-            <span class="sec">📅 QUARTER & DATES</span>
-            <div class="inp"><label>Quarter <span class="req">*</span></label><select id="quarter" required></select></div>
-            <div class="r2"><div class="inp"><label>Start Date <span class="req">*</span></label><input type="date" id="startDate" required onchange="updateAll()"></div><div class="inp"><label>End Date</label><input type="text" id="endDate" readonly style="background:#f5f5f5;font-weight:600;color:#ff6f00"></div></div>
 
             <div style="background:#f0f7e6;border-radius:1rem;padding:.8rem">
                 <strong>👕 Jersey</strong>
@@ -173,7 +206,10 @@
 
             <span class="sec">💼 PAYMENT SUMMARY</span>
             <div class="ledger" id="ledger">
-                <div class="lg-header"><span>💼 PAYMENT SUMMARY</span><span class="lg-mode" id="lgMode">New Registration</span></div>
+                <div class="lg-header">
+                    <span>💼 PAYMENT SUMMARY</span>
+                    <span class="lg-mode" id="lgMode">New Registration</span>
+                </div>
                 <div class="lg-body">
                     <div class="lg-row"><span>Student</span><b id="lgStudent">—</b></div>
                     <div class="lg-row"><span>Batch</span><b id="lgBatch">—</b></div>
@@ -182,8 +218,6 @@
                 </div>
                 <div class="lg-sep"></div>
                 <div class="lg-body">
-                    <div class="lg-row"><span>Rate per class</span><b id="lgRate">₹0</b></div>
-                    <div class="lg-row"><span>Classes in period</span><b id="lgClasses">0</b></div>
                     <div class="lg-row"><span>Coaching Fee (gross)</span><b id="lgGross">₹0</b></div>
                     <div class="lg-row lg-sub" id="lgSeasonRow" style="display:none"><span>Season Discount (5%)</span><b id="lgSeason">—</b></div>
                     <div class="lg-row lg-sub" id="lgSibRow" style="display:none"><span>Sibling Discount (5%)</span><b id="lgSib">—</b></div>
@@ -206,42 +240,47 @@
             <div class="r2"><div class="inp"><label>Experience</label><select id="experience"><option value="">--</option><option value="beginner">Beginner</option><option value="school">School</option><option value="club">Club</option><option value="district">District</option></select></div><div class="inp"><label>Playing Position</label><input type="text" id="playingStyle" placeholder="Forward, Midfielder, Defender"></div></div>
             <div class="inp"><label>Medical</label><input type="text" id="medical"></div>
 
-            <div class="note"><strong>📌 TERMS & CONDITIONS:</strong><ul><li>📅 <strong>Admissions are on Quarterly/Annual basis:</strong> Q1: Jun-Sep | Q2: Oct-Dec | Q3: Jan-Mar</li><li>💰 <strong>Fee is per class:</strong> ₹355/class (3-day batches) · ₹469/class (2-day batch). Joining within the first 7 days of a month is charged as a full month.</li><li>❌ <strong>No compensatory sessions</strong> for missed training (except on sport injuries)</li><li>🔄 <strong>Batch change</strong> permitted at the start of a new quarter — fee is recalculated at the new batch rate</li><li>👕 <strong>Jersey is MANDATORY</strong> for new students. Old students may reuse existing jersey</li><li>👨‍👩‍👧‍👦 <strong>Sibling Discount:</strong> 5% off on coaching fee for second child</li><li>⚽ <strong>Matches</strong> conducted on weekends. Charges based on ground/overs. That will be communicated prior to match</li><li>💰 <strong>Fees are non-refundable and non-transferable</strong></li></ul><p style="margin-top:.5rem;font-size:.8rem">📞 <strong>+91-9606743437</strong> | 📧 <strong>ynsportsforexcellence@gmail.com</strong><br>📍 <strong>Varthur, Bangalore - 560087</strong></p><div class="consent-box"><label style="display:flex;align-items:flex-start;gap:.8rem;cursor:pointer;font-size:.9rem;color:#2d4a22;line-height:1.4;"><input type="checkbox" id="consent" required style="width:22px;height:22px;margin-top:3px;accent-color:#ff6f00;flex-shrink:0;"><span><strong>✅ I agree that, I read the medical & playing consent form provided in academy and agree to that. I also agree to all terms & conditions above.</strong></span></label></div></div>
+            <div class="note"><strong>📌 TERMS & CONDITIONS:</strong><ul><li>📅 <strong>Admissions are on Quarterly/Annual basis:</strong> Q1: Jun-Sep | Q2: Oct-Dec | Q3: Jan-Mar</li><li>💰 <strong>Fees are billed on a quarterly basis.</strong> Joining within the first 7 days of a month is charged as a full month.</li><li>❌ <strong>No compensatory sessions</strong> for missed training (except on sport injuries)</li><li>🔄 <strong>Batch change</strong> permitted at the start of a new quarter — fee is recalculated at the new batch rate</li><li>👕 <strong>Jersey is MANDATORY</strong> for new students. Old students may reuse existing jersey</li><li>👨‍👩‍👧‍👦 <strong>Sibling Discount:</strong> 5% off on coaching fee for second child</li><li>⚽ <strong>Matches</strong> conducted on weekends. Charges based on ground/overs. That will be communicated prior to match</li><li>💰 <strong>Fees are non-refundable and non-transferable</strong></li></ul><p style="margin-top:.5rem;font-size:.8rem">📞 <strong>+91-9606743437</strong> | 📧 <strong>ynsportsforexcellence@gmail.com</strong><br>📍 <strong>Varthur, Bangalore - 560087</strong></p><div class="consent-box"><label style="display:flex;align-items:flex-start;gap:.8rem;cursor:pointer;font-size:.9rem;color:#2d4a22;line-height:1.4;"><input type="checkbox" id="consent" required style="width:22px;height:22px;margin-top:3px;accent-color:#ff6f00;flex-shrink:0;"><span><strong>✅ I agree that, I read the medical & playing consent form provided in academy and agree to that. I also agree to all terms & conditions above.</strong></span></label></div></div>
             <button type="submit" class="btn" id="submitBtn">⚽ SUBMIT</button>
         </div></form>
     </div>
 </div>
 <script>
 /* =====================================================================
-   YNFA VARTHUR — Production Front-end
-   Per-class fee + 7-day grace + optimized lookup
+   YNFA VARTHUR — Final Front-end
+   Per-class engine (backend) + quarterly display (cards) + 7-day grace
    ===================================================================== */
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxWdAbH_j5_ajNf5yXhxRlvpe4vUo0rOrjwNEZD3mL_EQHjRsg3V--YRN--fwxVRDXx7Q/exec';
+
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzy92jO4IKIMV0JxoLunCdmqZ603l5mYdyK_7f17pIr2FrqQ8P58-61SKBy794xscv_Ug/exec';
 const ACADEMY_NAME = 'YNFA Varthur';
 const SIBLING_DISCOUNT = 0.05;
 
-/* ---------- Lookup tuning ---------- */
-const LOOKUP_TIMEOUT_MS = 15000;
+const LOOKUP_TIMEOUT_MS = 30000;
 const LOOKUP_CACHE_TTL_MS = 5 * 60 * 1000;
 const LOOKUP_CACHE_PREFIX = 'ynfa_lk_';
-const LOOKUP_RETRY = 1;
+const LOOKUP_RETRY = 2;
+const LOOKUP_RETRY_DELAY = 800;
+const WARM_ON_LOAD = true;
 
 const qd = {
     Q1:{s:'2026-06-01', e:'2026-09-30'},
     Q2:{s:'2026-10-01', e:'2026-12-31'},
     Q3:{s:'2027-01-01', e:'2027-03-31'}
 };
+
+/* Internal per-class rates — used only to compute quarterly totals. Never shown raw. */
 const BATCH = {
     batch1:{days:[3,4,5],    rate:355, name:'Batch 1', daysTxt:'Wed, Thu, Fri'},
     batch2:{days:[5,6,0],    rate:355, name:'Batch 2', daysTxt:'Fri, Sat, Sun'},
     batch3:{days:[6,0],      rate:469, name:'Batch 3', daysTxt:'Sat, Sun'},
     pro:   {days:[3,4,5,6,0],rate:0,   name:'Pro',     daysTxt:'Wed-Sun (5 days)', season:47500}
 };
+
 const bd = {
-    batch1:'Batch 1: Wed, Thu, Fri ₹355/class',
-    batch2:'Batch 2: Fri, Sat, Sun ₹355/class',
-    batch3:'Batch 3: Sat & Sun ₹469/class',
-    pro:'Pro: Wed-Sun/5 Days (8+Yrs) ₹47,500/season'
+    batch1:'Batch 1: Wed, Thu, Fri',
+    batch2:'Batch 2: Fri, Sat, Sun',
+    batch3:'Batch 3: Sat & Sun',
+    pro:'Pro: Wed-Sun/5 Days (8+Yrs)'
 };
 
 const settings = JSON.parse(localStorage.getItem('ynfaVSettings') || '{}');
@@ -251,7 +290,7 @@ let FOUND   = {};
 let _lookupAbort = null;
 let _lookupSeq = 0;
 
-/* Logo / contact */
+/* Logo */
 const savedLogo = localStorage.getItem('ynfaVLogo');
 if (savedLogo) {
     document.getElementById('hlogo').src = savedLogo; document.getElementById('hlogo').classList.add('show');
@@ -265,7 +304,7 @@ function normMobile(s){ return String(s || '').replace(/\D/g, '').slice(-10); }
 function cfgOk(){ return SHEET_URL && SHEET_URL.indexOf('YOUR_APPS_SCRIPT_URL') === -1; }
 function fmt(n){ return '₹' + (Number(n)||0).toLocaleString('en-IN'); }
 
-/* ================= FEE ENGINE (7-day grace) ================= */
+/* ================= FEE ENGINE ================= */
 function quarterFee(q, b, sd) {
     const x = qd[q];
     if (!x) return { f:0, e:'', classes:0, rate:0 };
@@ -296,6 +335,7 @@ function quarterFee(q, b, sd) {
     }
     return { f: totalClasses * rate, e: x.e, classes: totalClasses, rate: rate };
 }
+
 function cf(q, b, sd, hs, paid) {
     paid = paid || [];
     const empty = { f:0, e:'', gross:0, seasonDisc:0, sibDisc:0, classes:0, rate:0 };
@@ -310,6 +350,7 @@ function cf(q, b, sd, hs, paid) {
     if (q === 'full') keys = ['Q1','Q2','Q3'].filter(function(k){ return paid.indexOf(k) === -1; });
     else { if (paid.indexOf(q) > -1) return empty; keys = [q]; }
     if (!keys.length) return empty;
+
     let gross = 0, classes = 0, end = '', rate = 0;
     keys.forEach(function(k){
         const r = quarterFee(k, b, sd);
@@ -321,6 +362,50 @@ function cf(q, b, sd, hs, paid) {
     let sibDisc = 0, net = afterSeason;
     if (hs) { sibDisc = Math.round(afterSeason * 0.05); net = afterSeason - sibDisc; }
     return { f:net, e:end, gross:gross, seasonDisc:seasonDisc, sibDisc:sibDisc, classes:classes, rate:rate };
+}
+
+/* ================= BATCH CARD FEES (quarterly only) ================= */
+function getDisplayQuarter() {
+    const sel = document.getElementById('quarter').value;
+    if (sel && sel !== 'full') return sel;
+    if (RENEWAL) {
+        const paid = RENEWAL.quartersPaid || [];
+        const first = ['Q1','Q2','Q3'].filter(function(k){ return paid.indexOf(k) === -1; });
+        return first[0] || 'Q1';
+    }
+    return 'Q1';
+}
+
+function computeBatchCardDisplay(batchKey) {
+    const sel = document.getElementById('quarter').value;
+    if (batchKey === 'pro') {
+        return { fee: BATCH.pro.season, note: 'Full season package' };
+    }
+    if (sel === 'full') {
+        const paid = RENEWAL ? (RENEWAL.quartersPaid || []) : [];
+        const keys = ['Q1','Q2','Q3'].filter(function(k){ return paid.indexOf(k) === -1; });
+        let total = 0, classes = 0;
+        keys.forEach(function(k){
+            const r = quarterFee(k, batchKey, qd[k].s);
+            total += r.f; classes += r.classes;
+        });
+        const disc = keys.length > 1 ? Math.round(total * 0.05) : 0;
+        return { fee: total - disc, note: classes + ' classes · Full Season' + (disc ? ' (5% off)' : '') };
+    }
+    const q = getDisplayQuarter();
+    const r = quarterFee(q, batchKey, qd[q].s);
+    return { fee: r.f, note: r.classes + ' classes · ' + q };
+}
+
+function updateBatchCardFees() {
+    ['batch1','batch2','batch3','pro'].forEach(function(b){
+        const rateEl = document.getElementById('bcRate_' + b);
+        const noteEl = document.getElementById('bcNote_' + b);
+        if (!rateEl || !noteEl) return;
+        const d = computeBatchCardDisplay(b);
+        rateEl.innerHTML = fmt(d.fee) + ' <small>/ quarter</small>';
+        noteEl.textContent = d.note;
+    });
 }
 
 /* ================= QUARTER DROPDOWN ================= */
@@ -365,6 +450,7 @@ function updateBatchCards() {
     });
     const hint = document.getElementById('batchHint');
     hint.textContent = (RENEWAL && cur) ? '· currently in ' + (BATCH[cur] ? BATCH[cur].name : cur) + ' — you can change' : '';
+    updateBatchCardFees();
 }
 
 /* ================= FAST LOOKUP ================= */
@@ -395,7 +481,7 @@ function skeletonHTML() {
 function fetchWithTimeout(url, signal, ms) {
     return new Promise(function(resolve, reject) {
         const t = setTimeout(function(){ reject(new Error('timeout')); }, ms);
-        fetch(url, { method:'GET', redirect:'follow', signal: signal })
+        fetch(url, { method:'GET', redirect:'follow', signal: signal, cache: 'no-store' })
             .then(function(r){ clearTimeout(t); resolve(r); })
             .catch(function(e){ clearTimeout(t); reject(e); });
     });
@@ -418,7 +504,6 @@ async function checkExisting() {
         return;
     }
 
-    /* --- Cache hit? instant --- */
     const cached = getCachedLookup(email, mobile);
     if (cached) {
         FOUND = {};
@@ -427,38 +512,61 @@ async function checkExisting() {
         return;
     }
 
-    /* --- Cancel any in-flight lookup --- */
     if (_lookupAbort) { try { _lookupAbort.abort(); } catch(e){} }
     _lookupAbort = new AbortController();
     const mySeq = ++_lookupSeq;
 
     btn.disabled = true; btn.textContent = '⏳ Searching…';
-    box.innerHTML = skeletonHTML();
+    box.innerHTML = skeletonHTML() +
+        '<div style="text-align:center;font-size:.72rem;color:#666;margin-top:.4rem" id="lookupProgress">Contacting server…</div>';
 
     const url = SHEET_URL + '?action=find' +
         '&email='  + encodeURIComponent(email) +
         '&mobile=' + encodeURIComponent(mobile) +
         '&t='      + Date.now();
 
-    let attempt = 0, lastErr = null;
-    while (attempt <= LOOKUP_RETRY) {
-        attempt++;
+    const startTime = Date.now();
+    const progressTimer = setInterval(function(){
+        const el = document.getElementById('lookupProgress');
+        if (!el) return;
+        const s = Math.floor((Date.now() - startTime) / 1000);
+        el.textContent = s < 5 ? 'Contacting server…' :
+                         s < 12 ? 'Server is warming up… (' + s + 's)' :
+                         s < 22 ? 'Almost there… (' + s + 's)' :
+                                  'Still working… (' + s + 's)';
+    }, 1000);
+
+    let lastErr = null;
+    for (let attempt = 0; attempt <= LOOKUP_RETRY; attempt++) {
+        if (mySeq !== _lookupSeq) { clearInterval(progressTimer); return; }
         try {
             const resp = await fetchWithTimeout(url, _lookupAbort.signal, LOOKUP_TIMEOUT_MS);
             const raw  = await resp.text();
-            if (mySeq !== _lookupSeq) return;
+            if (mySeq !== _lookupSeq) { clearInterval(progressTimer); return; }
 
             let data;
             try { data = JSON.parse(raw); }
             catch (pe) {
+                clearInterval(progressTimer);
                 box.innerHTML = '<div class="jm">❌ Server returned HTML instead of JSON.<br>' +
-                    '<small>Fix: Apps Script → Deploy → Manage deployments → ✏️ → <b>Who has access: Anyone</b> · <b>Version: New version</b> → Deploy. Then use the /exec URL.</small></div>';
+                    '<small>Apps Script → Deploy → Manage deployments → ✏️ → <b>Who has access: Anyone</b> · <b>Version: New version</b> → Deploy. Then paste the /exec URL.</small></div>';
                 btn.disabled = false; btn.textContent = '🔍 Find My Student ID';
                 return;
             }
-            if (data.status !== 'success') { box.innerHTML = '<div class="jm">❌ ' + esc(data.message || 'Lookup failed') + '</div>'; btn.disabled = false; btn.textContent = '🔍 Find My Student ID'; return; }
-            if (!data.students || !data.students.length) { box.innerHTML = '<div class="jm">❌ No registration found for these details.</div>'; btn.disabled = false; btn.textContent = '🔍 Find My Student ID'; return; }
-
+            if (data.status !== 'success') {
+                clearInterval(progressTimer);
+                box.innerHTML = '<div class="jm">❌ ' + esc(data.message || 'Lookup failed') + '</div>';
+                btn.disabled = false; btn.textContent = '🔍 Find My Student ID';
+                return;
+            }
+            if (!data.students || !data.students.length) {
+                clearInterval(progressTimer);
+                box.innerHTML = '<div class="jm">❌ No registration found for these details.</div>' +
+                    '<small style="display:block;color:#888;margin-top:.3rem">Searched: ' + esc(email || '—') + ' · ' + esc(mobile || '—') + '</small>';
+                btn.disabled = false; btn.textContent = '🔍 Find My Student ID';
+                return;
+            }
+            clearInterval(progressTimer);
             setCachedLookup(email, mobile, data);
             FOUND = {};
             data.students.forEach(function(s){ FOUND[s.studentId] = s; });
@@ -466,17 +574,22 @@ async function checkExisting() {
             btn.disabled = false; btn.textContent = '🔍 Find My Student ID';
             return;
         } catch (err) {
-            if (err.name === 'AbortError') return;
+            if (err.name === 'AbortError') { clearInterval(progressTimer); return; }
             lastErr = err;
-            if (attempt > LOOKUP_RETRY) break;
-            await new Promise(function(r){ setTimeout(r, 500); });
+            if (attempt < LOOKUP_RETRY) {
+                const el = document.getElementById('lookupProgress');
+                if (el) el.textContent = 'Retrying… (' + (attempt + 1) + '/' + LOOKUP_RETRY + ')';
+                await new Promise(function(r){ setTimeout(r, LOOKUP_RETRY_DELAY * (attempt + 1)); });
+            }
         }
     }
 
+    clearInterval(progressTimer);
     if (mySeq !== _lookupSeq) return;
     btn.disabled = false; btn.textContent = '🔍 Find My Student ID';
     box.innerHTML = '<div class="jm">❌ ' + esc(lastErr ? lastErr.message : 'Lookup failed') + '<br>' +
-        '<small>Check internet connection and try again.</small></div>';
+        '<small>Server took too long. First lookup after 6h can take 20–30s (cold start). Try again in a moment.</small><br>' +
+        '<button type="button" onclick="checkExisting()" style="margin-top:.5rem;background:#ff6f00;color:#fff;border:0;padding:.4rem 1.2rem;border-radius:2rem;font-weight:700;cursor:pointer;font-size:.8rem">🔄 Retry Now</button></div>';
 }
 
 function demoLookup() {
@@ -486,7 +599,7 @@ function demoLookup() {
         mobile:'9876543210', email:'demo@ynfa.test', address:'Varthur, Bangalore',
         experience:'beginner', playingStyle:'Forward', medical:'',
         hasSibling:false, siblingName:'',
-        batch:'Batch 1: Wed, Thu, Fri ₹355/class', batchKey:'batch1',
+        batch:'Batch 1: Wed, Thu, Fri', batchKey:'batch1',
         quartersPaid:['Q1']
     }];
     FOUND = {};
@@ -500,7 +613,7 @@ function renderExisting(list, fromCache, meta) {
     const box = document.getElementById('checkResult');
     const cacheTag = fromCache ? ' <span class="cache-badge">⚡ instant</span>' :
         (meta && meta.cached ? ' <span class="cache-badge">⚡ server cache</span>' : '');
-    const timing = (meta && meta.totalMs != null) ? ' <span style="color:#888;font-weight:400;font-size:.7rem">· ' + meta.totalMs + 'ms</span>' : '';
+    const timing = (meta && meta.ms != null) ? ' <span style="color:#888;font-weight:400;font-size:.7rem">· ' + meta.ms + 'ms</span>' : '';
 
     box.innerHTML = list.map(function(s){
         const paid = s.quartersPaid || [];
@@ -634,10 +747,12 @@ function updateAll() {
 
     document.getElementById('regDisp').textContent = 'Reg: ' + fmt(rf);
     document.getElementById('endDate').value = r.e ? new Date(r.e).toLocaleDateString('en-IN', { year:'numeric', month:'long', day:'numeric' }) : '';
+
     updateBatchCards();
     updateLedger(r, jt, rf, gt, b, q, sd);
     genQR(gt, q === 'full' ? 'Full Season' : (qd[q] ? qd[q].s + ' to ' + qd[q].e : ''));
 }
+
 function updateLedger(r, jt, rf, gt, b, q, sd) {
     document.getElementById('lgStudent').textContent = document.getElementById('sname').value.trim() || '—';
     let batchTxt = b && BATCH[b] ? BATCH[b].name : '—';
@@ -647,30 +762,32 @@ function updateLedger(r, jt, rf, gt, b, q, sd) {
     }
     document.getElementById('lgBatch').textContent = batchTxt;
     document.getElementById('lgQuarter').textContent = q ? (q === 'full' ? 'Full Season (Q1+Q2+Q3)' : q) : '—';
+
     let periodTxt = '—';
     if (r.e && sd) periodTxt = new Date(sd).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) +
         ' → ' + new Date(r.e).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
     document.getElementById('lgPeriod').textContent = periodTxt;
-    document.getElementById('lgRate').textContent = (b === 'pro') ? '—' : (r.rate ? fmt(r.rate) : '—');
-    document.getElementById('lgClasses').textContent = (b === 'pro') ? '—' : r.classes;
+
     document.getElementById('lgGross').textContent   = fmt(r.gross || 0);
     document.getElementById('lgCoaching').textContent = fmt(r.f);
     document.getElementById('lgJersey').textContent  = fmt(jt);
     document.getElementById('lgReg').textContent     = fmt(rf);
     document.getElementById('lgTotal').textContent   = fmt(gt);
+
     const seasonRow = document.getElementById('lgSeasonRow');
     const sibRow    = document.getElementById('lgSibRow');
     if (r.seasonDisc > 0) { seasonRow.style.display = 'flex'; document.getElementById('lgSeason').textContent = '-' + fmt(r.seasonDisc); }
     else seasonRow.style.display = 'none';
     if (r.sibDisc > 0) { sibRow.style.display = 'flex'; document.getElementById('lgSib').textContent = '-' + fmt(r.sibDisc); }
     else sibRow.style.display = 'none';
+
     const modeEl = document.getElementById('lgMode');
     if (RENEWAL) { modeEl.textContent = 'Renewal · ' + RENEWAL.studentId; modeEl.classList.add('renewal'); }
     else { modeEl.textContent = 'New Registration'; modeEl.classList.remove('renewal'); }
+
     let note = 'All fees are inclusive of applicable GST. ';
-    if (b !== 'pro' && r.rate && r.classes) note += 'Coaching = ' + r.classes + ' class' + (r.classes>1?'es':'') + ' × ' + fmt(r.rate) + '. ';
     if (q === 'full') note += 'Season discount of 5% already applied. ';
-    if (RENEWAL && RENEWAL.batchKey && b && b !== RENEWAL.batchKey) note += 'Batch change: fee recalculated at the new batch rate.';
+    if (RENEWAL && RENEWAL.batchKey && b && b !== RENEWAL.batchKey) note += 'Batch change: fee recalculated for the new batch.';
     if (sd) {
         const jd = new Date(sd); const x = qd[q];
         if (x) { const qs = new Date(x.s); if (jd >= qs && jd.getDate() <= 7) note += ' Joined within first 7 days — full month applied.'; }
@@ -810,7 +927,6 @@ async function submitForm(e) {
         });
         const result = await resp.json();
         if (result.status === 'success') {
-            /* Clear cached lookups so next search is fresh */
             Object.keys(sessionStorage).forEach(function(k){ if (k.indexOf(LOOKUP_CACHE_PREFIX) === 0) sessionStorage.removeItem(k); });
 
             document.getElementById('loading').classList.remove('on');
@@ -822,10 +938,7 @@ async function submitForm(e) {
             document.getElementById('entityName').innerHTML = '<strong>YN Sports for Excellence</strong><br>(Subsidiary of WoW Fashion & Sports)';
             document.getElementById('centreNameDisplay').textContent = ACADEMY_NAME;
 
-            let breakup = '';
-            if (b !== 'pro' && r.rate && r.classes) {
-                breakup += 'Rate per class: ' + fmt(r.rate) + '<br>Classes in period: ' + r.classes + '<br>Coaching Fee (gross): ' + fmt(r.gross) + '<br>';
-            } else breakup += 'Coaching Fee (gross): ' + fmt(r.gross) + '<br>';
+            let breakup = 'Coaching Fee (gross): ' + fmt(r.gross) + '<br>';
             if (r.seasonDisc > 0) breakup += 'Season Discount (5%): -' + fmt(r.seasonDisc) + '<br>';
             if (r.sibDisc > 0)    breakup += 'Sibling Discount (5%): -' + fmt(r.sibDisc) + '<br>';
             breakup += 'Net Coaching (incl. 18% GST): ' + fmt(r.f) + '<br>';
@@ -868,12 +981,11 @@ window.onload = function() {
     rebuildQuarterOptions([]);
     updateAll();
     togglePaymentFields();
-    /* Warm the backend index on first paint (silent) */
-    if (cfgOk()) {
+    if (cfgOk() && WARM_ON_LOAD) {
         setTimeout(function(){
-            fetch(SHEET_URL + '?action=stats&t=' + Date.now(), { method:'GET', redirect:'follow' })
+            fetch(SHEET_URL + '?action=warm&t=' + Date.now(), { method:'GET', redirect:'follow', cache:'no-store' })
                 .catch(function(){});
-        }, 1500);
+        }, 300);
     }
 };
 
@@ -894,7 +1006,6 @@ document.getElementById('extraJersey').addEventListener('change', updateAll);
 document.getElementById('needJersey').addEventListener('change', updateAll);
 document.getElementById('sname').addEventListener('input', updateAll);
 
-/* Auto-search when both fields are empty again */
 ['checkEmail','checkMobile'].forEach(function(id){
     document.getElementById(id).addEventListener('input', function(){
         const e = document.getElementById('checkEmail').value.trim();
