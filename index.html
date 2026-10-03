@@ -71,10 +71,10 @@
             <div class="inp"><label>Quarter <span class="req">*</span></label><select id="quarter" required></select></div>
             <div class="r2"><div class="inp"><label>Start Date <span class="req">*</span></label><input type="date" id="startDate" required onchange="updateAll()"></div><div class="inp"><label>End Date</label><input type="text" id="endDate" readonly style="background:#f5f5f5;font-weight:600;color:#ff6f00"></div></div>
             <div style="background:#f0f7e6;border-radius:1rem;padding:.8rem">
-                <strong>👕 Jersey - Mandatory</strong>
-                <div id="jerseyNew"><div class="jm">✅ Jersey Fee: ₹1000 (Mandatory)</div></div>
+                <strong>👕 Jersey</strong>
+                <div id="jerseyNew"><div class="jm">✅ Jersey Fee: ₹1000 (Mandatory for new students)</div></div>
                 <div id="jerseyOld" style="display:none">
-                    <label style="display:flex;align-items:center;gap:.5rem;margin-top:.3rem"><input type="checkbox" id="needJersey" onchange="updateAll()"> I need Jersey - ₹1000</label>
+                    <label style="display:flex;align-items:center;gap:.5rem;margin-top:.3rem"><input type="checkbox" id="needJersey" onchange="updateAll()"> I need a new Jersey - ₹1000</label>
                     <div class="jo">✅ Old students: Jersey is optional if you already have one</div>
                 </div>
                 <label style="display:flex;align-items:center;gap:.5rem;margin-top:.3rem"><input type="checkbox" id="extraJersey" onchange="updateAll()"> Extra pair +₹1000</label>
@@ -88,7 +88,7 @@
             <span class="sec">⚽ TRAINING</span>
             <div class="r2"><div class="inp"><label>Experience</label><select id="experience"><option value="">--</option><option value="beginner">Beginner</option><option value="school">School</option><option value="club">Club</option><option value="district">District</option></select></div><div class="inp"><label>Playing Position</label><input type="text" id="playingStyle" placeholder="Forward, Midfielder, Defender"></div></div>
             <div class="inp"><label>Medical</label><input type="text" id="medical"></div>
-            <div class="note"><strong>📌 TERMS & CONDITIONS:</strong><ul><li>📅 <strong>Admissions are on Quarterly/Annual basis:</strong> Q1: Jun-Sep | Q2: Oct-Dec | Q3: Jan-Mar</li><li>💰 <strong>Academy fees will be revised based on quarterly basis.</strong> It is at the discretion of management</li><li>❌ <strong>No compensatory sessions</strong> for missed training (except on sport injuries)</li><li>🚫 <strong>No change of Batch</strong> allowed once selected in quarter</li><li>👕 <strong>Jersey is MANDATORY</strong> for all new students. Old students may reuse existing jersey</li><li>👨‍👩‍👧‍👦 <strong>Sibling Discount:</strong> 5% off on coaching fee for second child</li><li>⚽ <strong>Matches</strong> conducted on weekends. Charges based on ground/overs. That will be communicated prior to match</li><li>💰 <strong>Fees are non-refundable and non-transferable</strong></li></ul><p style="margin-top:.5rem;font-size:.8rem">📞 <strong>+91-9606743437</strong> | 📧 <strong>ynsportsforexcellence@gmail.com</strong><br>📍 <strong>Varthur, Bangalore - 560087</strong></p><div class="consent-box"><label style="display:flex;align-items:flex-start;gap:.8rem;cursor:pointer;font-size:.9rem;color:#2d4a22;line-height:1.4;"><input type="checkbox" id="consent" required style="width:22px;height:22px;margin-top:3px;accent-color:#ff6f00;flex-shrink:0;"><span><strong>✅ I agree that, I read the medical & playing consent form provided in academy and agree to that. I also agree to all terms & conditions above.</strong></span></label></div></div>
+            <div class="note"><strong>📌 TERMS & CONDITIONS:</strong><ul><li>📅 <strong>Admissions are on Quarterly/Annual basis:</strong> Q1: Jun-Sep | Q2: Oct-Dec | Q3: Jan-Mar</li><li>💰 <strong>Academy fees will be revised based on quarterly basis.</strong> It is at the discretion of management</li><li>❌ <strong>No compensatory sessions</strong> for missed training (except on sport injuries)</li><li>🚫 <strong>No change of Batch</strong> allowed once selected in quarter</li><li>👕 <strong>Jersey is MANDATORY</strong> for new students. Old students may reuse existing jersey</li><li>👨‍👩‍👧‍👦 <strong>Sibling Discount:</strong> 5% off on coaching fee for second child</li><li>⚽ <strong>Matches</strong> conducted on weekends. Charges based on ground/overs. That will be communicated prior to match</li><li>💰 <strong>Fees are non-refundable and non-transferable</strong></li></ul><p style="margin-top:.5rem;font-size:.8rem">📞 <strong>+91-9606743437</strong> | 📧 <strong>ynsportsforexcellence@gmail.com</strong><br>📍 <strong>Varthur, Bangalore - 560087</strong></p><div class="consent-box"><label style="display:flex;align-items:flex-start;gap:.8rem;cursor:pointer;font-size:.9rem;color:#2d4a22;line-height:1.4;"><input type="checkbox" id="consent" required style="width:22px;height:22px;margin-top:3px;accent-color:#ff6f00;flex-shrink:0;"><span><strong>✅ I agree that, I read the medical & playing consent form provided in academy and agree to that. I also agree to all terms & conditions above.</strong></span></label></div></div>
             <button type="submit" class="btn" id="submitBtn">⚽ SUBMIT</button>
         </div></form>
     </div>
@@ -98,22 +98,16 @@
    YNFA VARTHUR – REGISTRATION FRONT-END
    ===================================================================== */
 
-/* ---------------- CONFIG ---------------- */
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbz4_5X5PQfxKP4DusDFJoAW8X1PLb5mQ4gsua01cYdMPafGaJK0H7CwVWvgogE-fuev4g/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycby6k1hGRSQ1YksrXpAb33kkCbZmJnv8M9ipDgHqDqB6bklSNRY8kP--hDLpoViydPFjYg/exec';
 const ACADEMY_NAME = 'YNFA Varthur';
 const SIBLING_DISCOUNT = 0.05;
 
-/* Quarters (start / end / months) */
 const qd = {
     Q1:{s:'2026-06-01', e:'2026-09-30', m:4},
     Q2:{s:'2026-10-01', e:'2026-12-31', m:3},
     Q3:{s:'2027-01-01', e:'2027-03-31', m:3}
 };
-
-/* Batch fees */
 const bf = { batch1:4250, batch2:4250, batch3:3750, pro:47500 };
-
-/* Batch descriptions */
 const bd = {
     batch1:'Batch 1: Wed, Thu, Fri ₹4,250',
     batch2:'Batch 2: Fri, Sat, Sun ₹4,250',
@@ -123,11 +117,10 @@ const bd = {
 
 const settings = JSON.parse(localStorage.getItem('ynfaVSettings') || '{}');
 const UPI_ID = settings.upiId || '0798121A0079936.BQR@kotak';
+let RENEWAL = null;
+let FOUND   = {};
 
-let RENEWAL = null;   // holds the student record while renewing
-let FOUND   = {};     // studentId -> record (from lookup)
-
-/* ---------------- LOGO / CONTACT ---------------- */
+/* Logo / Contact */
 const savedLogo = localStorage.getItem('ynfaVLogo');
 if (savedLogo) {
     document.getElementById('hlogo').src = savedLogo; document.getElementById('hlogo').classList.add('show');
@@ -136,18 +129,18 @@ if (savedLogo) {
 document.getElementById('okContact').textContent = '📞 ' + (settings.phone || '+91-9606743437') + ' | 📧 ' + (settings.email || 'ynsportsforexcellence@gmail.com');
 document.getElementById('upiIdText').textContent = 'UPI ID: ' + UPI_ID;
 
-/* ---------------- UTIL ---------------- */
+/* Util */
 function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 function normMobile(s){ return String(s || '').replace(/\D/g, '').slice(-10); }
 function cfgOk(){ return SHEET_URL && SHEET_URL.indexOf('YOUR_APPS_SCRIPT_URL') === -1; }
 
-/* ---------------- FEE ENGINE ---------------- */
+/* ================= FEE ENGINE ================= */
 function countBatchDaysInMonth(year, month, batch, fromDate) {
     const dayMap = {
-        batch1: [3,4,5],      // Wed, Thu, Fri
-        batch2: [5,6,0],      // Fri, Sat, Sun
-        batch3: [6,0],        // Sat, Sun
-        pro:    [3,4,5,6,0]   // Wed-Sun
+        batch1: [3,4,5],
+        batch2: [5,6,0],
+        batch3: [6,0],
+        pro:    [3,4,5,6,0]
     };
     const days = dayMap[batch] || dayMap.batch1;
     let count = 0;
@@ -161,14 +154,12 @@ function countBatchDaysInMonth(year, month, batch, fromDate) {
     return count;
 }
 
-/* Fee for ONE quarter (with pro-rata if joining mid-quarter) */
 function quarterFee(q, b, sd) {
     const x = qd[q];
     if (!x) return { f:0, e:'' };
     const m  = bf[b] || 4250;
     const qs = new Date(x.s), qe = new Date(x.e), jd = new Date(sd);
     if (jd > qe) return { f:0, e:'' };
-
     const graceEnd = new Date(qs); graceEnd.setDate(graceEnd.getDate() + 7);
     if (jd <= graceEnd) return { f: m * x.m, e: x.e };
 
@@ -193,40 +184,34 @@ function quarterFee(q, b, sd) {
     return { f: totalFee, e: x.e };
 }
 
-/* Total coaching fee. `paid` = quarters already paid (renewals) */
 function cf(q, b, sd, hs, paid) {
     paid = paid || [];
     if (!q || !b || !sd) return { f:0, e:'' };
-
     if (b === 'pro') {
         let f = bf.pro;
         if (hs) f = Math.round(f * (1 - SIBLING_DISCOUNT));
         return { f:f, e:'2027-03-31' };
     }
-
     let keys;
     if (q === 'full') {
         keys = ['Q1','Q2','Q3'].filter(function(k){ return paid.indexOf(k) === -1; });
     } else {
-        if (paid.indexOf(q) > -1) return { f:0, e:'' };   // already paid
+        if (paid.indexOf(q) > -1) return { f:0, e:'' };
         keys = [q];
     }
     if (!keys.length) return { f:0, e:'' };
-
     let total = 0, end = '';
     keys.forEach(function(k){
         const r = quarterFee(k, b, sd);
         total += r.f;
         if (r.e) end = r.e;
     });
-
-    if (q === 'full' && keys.length > 1) total = Math.round(total * 0.95);  // season discount
+    if (q === 'full' && keys.length > 1) total = Math.round(total * 0.95);
     if (hs) total = Math.round(total * (1 - SIBLING_DISCOUNT));
-
     return { f: total, e: end };
 }
 
-/* ---------------- QUARTER DROPDOWN ---------------- */
+/* ================= QUARTER DROPDOWN ================= */
 function rebuildQuarterOptions(paid) {
     paid = paid || [];
     const sel = document.getElementById('quarter');
@@ -238,8 +223,7 @@ function rebuildQuarterOptions(paid) {
         { v:'full', t:'Full Season 🔥5% OFF' }
     ];
     sel.innerHTML = '<option value="">--</option>' + opts.map(function(o){
-        let dis = '';
-        let label = o.t;
+        let dis = '', label = o.t;
         if (o.v === 'full') {
             if (remaining.length < 2) dis = 'disabled';
             if (remaining.length < 3 && remaining.length > 1) label = 'Remaining Season (' + remaining.join('+') + ') 🔥5% OFF';
@@ -251,49 +235,80 @@ function rebuildQuarterOptions(paid) {
     }).join('');
 }
 
-/* ---------------- LOOKUP: ALREADY REGISTERED ---------------- */
+/* ================= LOOKUP ================= */
 async function checkExisting() {
     const box    = document.getElementById('checkResult');
-    const email  = document.getElementById('checkEmail').value.trim();
+    const email  = document.getElementById('checkEmail').value.trim().toLowerCase();
     const mobile = normMobile(document.getElementById('checkMobile').value);
 
+    box.innerHTML = '';
+
     if (!email && !mobile) {
-        box.innerHTML = '<div class="jm">⚠️ Please enter your registered email or 10-digit mobile number.</div>';
+        box.innerHTML = '<div class="jm">⚠️ Please enter your registered email OR 10-digit mobile number.</div>';
         return;
     }
+
     if (!cfgOk()) {
-        box.innerHTML = '<div class="jm">⚠️ Backend not configured. Set <code>SHEET_URL</code> in this page\'s script to your Apps Script /exec URL.</div>';
+        box.innerHTML =
+            '<div class="jm">⚠️ Backend URL not set. Paste your Apps Script /exec URL into SHEET_URL.</div>' +
+            '<div style="margin-top:.5rem">' +
+                '<button type="button" onclick="demoLookup()" style="background:#ff6f00;color:#fff;border:0;padding:.6rem 1.2rem;border-radius:2rem;font-weight:700;cursor:pointer">▶ Try Demo</button>' +
+            '</div>';
         return;
     }
 
     box.innerHTML = '<div class="existing-msg">🔍 Searching…</div>';
 
+    const url = SHEET_URL + '?action=find'
+        + '&email='  + encodeURIComponent(email)
+        + '&mobile=' + encodeURIComponent(mobile)
+        + '&t='      + Date.now();
+
     try {
-        const url = SHEET_URL
-            + '?action=find'
-            + '&email='  + encodeURIComponent(email)
-            + '&mobile=' + encodeURIComponent(mobile)
-            + '&t='      + Date.now();
+        const resp = await fetch(url, { method:'GET', redirect:'follow' });
+        const raw  = await resp.text();
 
-        const resp = await fetch(url, { method:'GET' });
-        const data = await resp.json();
-
+        let data;
+        try { data = JSON.parse(raw); }
+        catch (pe) {
+            box.innerHTML =
+                '<div class="jm">❌ Server returned HTML instead of JSON.<br>' +
+                '<small>Most likely: Apps Script has no <code>doGet()</code>, or deployment is not set to <strong>"Anyone"</strong>, or you used <code>/dev</code> instead of <code>/exec</code>.</small><br>' +
+                '<small style="display:block;margin-top:.4rem;color:#c41e3a;word-break:break-all">' + esc(raw.slice(0, 200)) + '</small></div>';
+            return;
+        }
         if (data.status !== 'success') {
             box.innerHTML = '<div class="jm">❌ ' + esc(data.message || 'Lookup failed') + '</div>';
             return;
         }
         if (!data.students || !data.students.length) {
-            box.innerHTML = '<div class="jm">❌ No registration found for these details. Please register as a new student below.</div>';
+            box.innerHTML = '<div class="jm">❌ No registration found for these details.<br>' +
+                '<small>email: "<strong>' + esc(email) + '</strong>" · mobile: "<strong>' + esc(mobile) + '</strong>"</small></div>';
             return;
         }
-
         FOUND = {};
         data.students.forEach(function(s){ FOUND[s.studentId] = s; });
         renderExisting(data.students);
-
     } catch (err) {
-        box.innerHTML = '<div class="jm">❌ Could not reach the server: ' + esc(err.message) + '</div>';
+        box.innerHTML = '<div class="jm">❌ Network error: ' + esc(err.message) + '</div>';
     }
+}
+
+function demoLookup() {
+    const demo = [{
+        studentId:'YNFAV000007', studentName:'Demo Student', parentName:'Demo Parent',
+        age:'10', dob:'2016-04-12', gender:'Male',
+        mobile:'9876543210', email:'demo@ynfa.test', address:'Varthur, Bangalore',
+        experience:'beginner', playingStyle:'Forward', medical:'',
+        hasSibling:false, siblingName:'',
+        batch:'Batch 1: Wed, Thu, Fri ₹4,250', batchKey:'batch1',
+        quartersPaid:['Q1']
+    }];
+    FOUND = {};
+    demo.forEach(function(s){ FOUND[s.studentId] = s; });
+    renderExisting(demo);
+    document.getElementById('checkResult').insertAdjacentHTML('beforeend',
+        '<div class="jm" style="margin-top:.6rem">⚠️ DEMO — Q1 already paid, so Q2 / Q3 / Remaining Season are selectable.</div>');
 }
 
 function renderExisting(list) {
@@ -304,7 +319,6 @@ function renderExisting(list) {
         const btn = remaining.length
             ? '<button type="button" onclick="startRenewal(\'' + s.studentId + '\')" style="margin-top:.6rem;background:#2e7d32;color:#fff;border:0;padding:.6rem 1.2rem;border-radius:2rem;font-weight:700;cursor:pointer;width:100%">💳 Continue / Pay Next Quarter</button>'
             : '<div class="jo" style="margin-top:.5rem">✅ All quarters (Q1–Q3) already paid for 2026-27</div>';
-
         return '<div class="existing-msg">'
             + '<strong>' + esc(s.studentName) + '</strong> · '
             + '<span style="font-family:\'Courier New\',monospace;font-weight:700">' + esc(s.studentId) + '</span><br>'
@@ -316,21 +330,17 @@ function renderExisting(list) {
     }).join('');
 }
 
-/* ---------------- RENEWAL MODE ---------------- */
+/* ================= RENEWAL MODE ================= */
 function lockField(id, val) {
     const el = document.getElementById(id);
     if (!el) return;
     el.value = (val == null ? '' : val);
-    el.readOnly = true;
-    el.disabled = true;
-    el.style.background = '#eef2f7';
+    el.readOnly = true; el.disabled = true; el.style.background = '#eef2f7';
 }
 function unlockField(id) {
     const el = document.getElementById(id);
     if (!el) return;
-    el.readOnly = false;
-    el.disabled = false;
-    el.style.background = '';
+    el.readOnly = false; el.disabled = false; el.style.background = '';
 }
 
 function startRenewal(id) {
@@ -338,7 +348,6 @@ function startRenewal(id) {
     if (!s) return;
     RENEWAL = s;
 
-    /* 1. Fill + lock personal details */
     lockField('sname',       s.studentName);
     lockField('pname',       s.parentName);
     lockField('age',         s.age);
@@ -351,29 +360,21 @@ function startRenewal(id) {
     lockField('playingStyle',s.playingStyle);
     lockField('medical',     s.medical);
 
-    /* 2. Batch is locked (no mid-season change) */
     const bsel = document.getElementById('batchType');
     if (s.batchKey) bsel.value = s.batchKey;
-    bsel.disabled = true;
-    bsel.style.background = '#eef2f7';
+    bsel.disabled = true; bsel.style.background = '#eef2f7';
 
-    /* 3. Sibling flag carried forward */
     const hsBox = document.getElementById('hasSibling');
-    hsBox.checked = !!s.hasSibling;
-    hsBox.disabled = true;
+    hsBox.checked = !!s.hasSibling; hsBox.disabled = true;
     document.getElementById('siblingSection').style.display = s.hasSibling ? 'block' : 'none';
     if (s.hasSibling && s.siblingName) lockField('siblingName', s.siblingName);
 
-    /* 4. Old student → registration fee waived */
     const osBox = document.getElementById('oldStudent');
-    osBox.checked = true;
-    osBox.disabled = true;
+    osBox.checked = true; osBox.disabled = true;
 
-    /* 5. Quarter list = only unpaid quarters */
     rebuildQuarterOptions(s.quartersPaid || []);
     document.getElementById('quarter').value = '';
 
-    /* 6. Renewal banner */
     document.getElementById('renewalBanner').style.display = 'block';
     document.getElementById('renewalInfo').innerHTML =
           'Student: <strong>' + esc(s.studentName) + '</strong> (' + esc(s.studentId) + ')<br>'
@@ -384,7 +385,6 @@ function startRenewal(id) {
     document.getElementById('idDisplay').textContent = s.studentId;
     document.getElementById('checkResult').innerHTML = '';
 
-    /* 7. Jersey is OPTIONAL for renewals – default to unchecked */
     document.getElementById('needJersey').checked = false;
 
     updateAll();
@@ -418,7 +418,7 @@ function exitRenewal() {
     updateAll();
 }
 
-/* ---------------- QR / UPI ---------------- */
+/* ================= QR / UPI ================= */
 function genQR(am, qt) {
     const qr = document.getElementById('qrcode');
     const ul = document.getElementById('upiLink');
@@ -442,7 +442,7 @@ function genQR(am, qt) {
     ul.appendChild(a);
 }
 
-/* ---------------- MAIN UPDATE ---------------- */
+/* ================= MAIN UPDATE ================= */
 function updateAll() {
     const q  = document.getElementById('quarter').value;
     const b  = document.getElementById('batchType').value;
@@ -453,7 +453,6 @@ function updateAll() {
     const jo = settings.oldJerseyOptional !== false;
     const paid = RENEWAL ? (RENEWAL.quartersPaid || []) : [];
 
-    /* Jersey display */
     if (os && jo) {
         document.getElementById('jerseyNew').style.display = 'none';
         document.getElementById('jerseyOld').style.display = 'block';
@@ -482,41 +481,37 @@ function updateAll() {
     let note = '';
     if (q === 'full') note += '✅ 5% Season Discount! ';
     if (b === 'pro')  note += '💼 Pro Batch ';
-    if (RENEWAL)      note += '🔄 Renewal — registration fee waived, jersey optional';
+    if (RENEWAL)      note += '🔄 Renewal — reg. fee waived, jersey optional';
     document.getElementById('discountNote').innerHTML = note;
 
     genQR(gt, q === 'full' ? 'Full Season' : (qd[q] ? qd[q].s + ' to ' + qd[q].e : ''));
 }
 
-/* ---------------- SIBLING ---------------- */
 function toggleSibling() {
     document.getElementById('siblingSection').style.display =
         document.getElementById('hasSibling').checked ? 'block' : 'none';
 }
 
-/* ---------------- PAYMENT FIELDS ---------------- */
 function togglePaymentFields() {
     const mode = document.getElementById('paymentMode').value;
     const receiptField = document.getElementById('receiptField');
     const txnField     = document.getElementById('txnField');
     const receiptReq   = document.getElementById('receiptReq');
     const txnReq       = document.getElementById('txnReq');
-
     if (mode === 'Cash') {
         receiptField.style.display = 'none';
-        txnField.style.display     = 'none';
-        receiptReq.style.display   = 'none';
-        txnReq.style.display       = 'none';
+        txnField.style.display = 'none';
+        receiptReq.style.display = 'none';
+        txnReq.style.display = 'none';
         removeReceipt();
     } else {
         receiptField.style.display = 'block';
-        txnField.style.display     = 'block';
-        receiptReq.style.display   = 'inline';
-        txnReq.style.display       = 'inline';
+        txnField.style.display = 'block';
+        receiptReq.style.display = 'inline';
+        txnReq.style.display = 'inline';
     }
 }
 
-/* ---------------- RECEIPT UPLOAD ---------------- */
 function previewReceipt(e) {
     e.stopPropagation();
     const f = e.target.files[0];
@@ -538,11 +533,10 @@ function removeReceipt() {
     document.getElementById('uploadPH').style.display = 'block';
 }
 
-/* ---------------- SUBMIT ---------------- */
+/* ================= SUBMIT ================= */
 async function submitForm(e) {
     e.preventDefault();
-
-    if (!cfgOk()) { alert('Backend not configured. Please set SHEET_URL in the page script.'); return false; }
+    if (!cfgOk()) { alert('Backend not configured. Please set SHEET_URL.'); return false; }
     if (!document.getElementById('consent').checked) { alert('Please agree to the terms & conditions.'); return false; }
 
     const mode = document.getElementById('paymentMode').value;
@@ -551,8 +545,7 @@ async function submitForm(e) {
     const q = document.getElementById('quarter').value;
     if (!q) { alert('Please select a quarter.'); return false; }
     if (RENEWAL && (RENEWAL.quartersPaid || []).indexOf(q) > -1) {
-        alert('This quarter is already paid for ' + RENEWAL.studentId);
-        return false;
+        alert('This quarter is already paid for ' + RENEWAL.studentId); return false;
     }
 
     const b  = document.getElementById('batchType').value;
@@ -578,8 +571,7 @@ async function submitForm(e) {
         if (!String(el.value || '').trim()) {
             const lbl = el.previousElementSibling ? el.previousElementSibling.textContent : required[i];
             alert('Please fill: ' + lbl.replace('*','').trim());
-            el.focus();
-            return false;
+            el.focus(); return false;
         }
     }
 
@@ -592,7 +584,7 @@ async function submitForm(e) {
     const rf   = RENEWAL ? 0 : (os ? 0 : 500);
     const gt   = r.f + jt + rf;
 
-    if (gt <= 0) { alert('Computed total is ₹0. Please check your selections.'); return false; }
+    if (gt <= 0) { alert('Computed total is ₹0.'); return false; }
 
     document.getElementById('loading').classList.add('on');
 
@@ -652,13 +644,11 @@ async function submitForm(e) {
                 '<strong>YN Sports for Excellence</strong><br>(Subsidiary of WoW Fashion & Sports)';
             document.getElementById('centreNameDisplay').textContent = ACADEMY_NAME;
 
-            let breakup =
-                'Coaching Fee (incl. 18% GST): ₹' + r.f.toLocaleString('en-IN') + '<br>';
+            let breakup = 'Coaching Fee (incl. 18% GST): ₹' + r.f.toLocaleString('en-IN') + '<br>';
             if (hs)           breakup += 'Sibling Discount (5%): -₹' + Math.round(r.f * 0.05).toLocaleString('en-IN') + '<br>';
             if (q === 'full') breakup += 'Season Discount (5%): -₹' + Math.round(r.f * 0.05).toLocaleString('en-IN') + '<br>';
-            breakup +=
-                'Jersey Fee (incl. 5% GST): ₹' + jt.toLocaleString('en-IN') + '<br>' +
-                'Registration Fee (incl. 18% GST): ₹' + rf.toLocaleString('en-IN');
+            breakup += 'Jersey Fee (incl. 5% GST): ₹' + jt.toLocaleString('en-IN') + '<br>' +
+                       'Registration Fee (incl. 18% GST): ₹' + rf.toLocaleString('en-IN');
 
             document.getElementById('feeBreakup').innerHTML = breakup;
             document.getElementById('finalTotal').textContent = '₹' + gt.toLocaleString('en-IN');
@@ -670,11 +660,9 @@ async function submitForm(e) {
         document.getElementById('loading').classList.remove('on');
         alert('Network or server error: ' + err.message);
     }
-
     return false;
 }
 
-/* ---------------- RESET ---------------- */
 function resetForm() {
     exitRenewal();
     document.getElementById('formContent').style.display = 'flex';
@@ -687,7 +675,7 @@ function resetForm() {
     updateAll();
 }
 
-/* ---------------- INIT ---------------- */
+/* ================= INIT ================= */
 window.onload = function() {
     document.getElementById('paidDate').value = new Date().toISOString().split('T')[0];
     document.getElementById('dob').max = new Date().toISOString().split('T')[0];
@@ -698,14 +686,11 @@ window.onload = function() {
     togglePaymentFields();
 };
 
-/* ---------------- EVENTS ---------------- */
 document.getElementById('quarter').addEventListener('change', function() {
     if (RENEWAL) {
         const paid = RENEWAL.quartersPaid || [];
         let key = this.value;
-        if (key === 'full') {
-            key = ['Q1','Q2','Q3'].filter(function(k){ return paid.indexOf(k) === -1; })[0];
-        }
+        if (key === 'full') key = ['Q1','Q2','Q3'].filter(function(k){ return paid.indexOf(k) === -1; })[0];
         if (key && qd[key]) document.getElementById('startDate').value = qd[key].s;
     }
     updateAll();
