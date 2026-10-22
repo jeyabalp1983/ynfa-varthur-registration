@@ -96,7 +96,7 @@
 <body>
 <div class="load" id="loading"><div class="spin"></div><p style="color:#ffd966;margin-top:1rem;font-weight:700">Processing...</p></div>
 <div class="main">
-    <div class="header"><div style="display:flex;align-items:center;gap:.8rem"><img class="hlogo" id="hlogo" src=""><span class="htitle">⚽ YNFA (VARTHUR)<span class="vtag">engine v6 · skip-quarters</span></span></div><div class="idbox" id="idDisplay">YNFAV------</div></div>
+    <div class="header"><div style="display:flex;align-items:center;gap:.8rem"><img class="hlogo" id="hlogo" src=""><span class="htitle">⚽ YNFA (VARTHUR)<span class="vtag">engine v7 · renewal-lock</span></span></div><div class="idbox" id="idDisplay">YNFAV------</div></div>
     <div class="formbox"><div class="flogo"><img id="flogo" src=""></div><h2>📋 REGISTRATION & PAYMENT - 2026-27</h2>
 
         <div class="ok" id="okMsg">
@@ -206,19 +206,19 @@
             <div class="r2"><div class="inp"><label>Experience</label><select id="experience"><option value="">--</option><option value="beginner">Beginner</option><option value="school">School</option><option value="club">Club</option><option value="district">District</option></select></div><div class="inp"><label>Playing Position</label><input type="text" id="playingStyle" placeholder="Forward, Midfielder, Defender"></div></div>
             <div class="inp"><label>Medical</label><input type="text" id="medical"></div>
 
-            <div class="note"><strong>📌 TERMS & CONDITIONS:</strong><ul><li>📅 <strong>Admissions are on Quarterly/Annual basis:</strong> Q1: Jun-Sep | Q2: Oct-Dec | Q3: Jan-Mar</li><li>💰 <strong>Fees are billed on a quarterly basis.</strong> Joining within the first 7 days of a month is charged as a full month. All fees are rounded to the nearest ₹10.</li><li>🔒 <strong>Continuing students</strong> may pay any future quarter, but cannot start mid-quarter — the start date is fixed to the quarter's first day.</li><li>❌ <strong>No compensatory sessions</strong> for missed training (except on sport injuries)</li><li>🔄 <strong>Batch change</strong> permitted at the start of a new quarter — fee is recalculated at the new batch rate</li><li>👕 <strong>Jersey is MANDATORY</strong> for new students. Old students may reuse existing jersey</li><li>👨‍👩‍👧‍👦 <strong>Sibling Discount:</strong> 5% off on coaching fee for second child</li><li>⚽ <strong>Matches</strong> conducted on weekends. Charges based on ground/overs. That will be communicated prior to match</li><li>💰 <strong>Fees are non-refundable and non-transferable</strong></li></ul><p style="margin-top:.5rem;font-size:.8rem">📞 <strong>+91-9606743437</strong> | 📧 <strong>ynsportsforexcellence@gmail.com</strong><br>📍 <strong>Varthur, Bangalore - 560087</strong></p><div class="consent-box"><label style="display:flex;align-items:flex-start;gap:.8rem;cursor:pointer;font-size:.9rem;color:#2d4a22;line-height:1.4;"><input type="checkbox" id="consent" required style="width:22px;height:22px;margin-top:3px;accent-color:#ff6f00;flex-shrink:0;"><span><strong>✅ I agree that, I read the medical & playing consent form provided in academy and agree to that. I also agree to all terms & conditions above.</strong></span></label></div></div>
+            <div class="note"><strong>📌 TERMS & CONDITIONS:</strong><ul><li>📅 <strong>Admissions are on Quarterly/Annual basis:</strong> Q1: Jun-Sep | Q2: Oct-Dec | Q3: Jan-Mar</li><li>💰 <strong>Fees are billed on a quarterly basis.</strong> Joining within the first 7 days of a month is charged as a full month. All fees are rounded to the nearest ₹10.</li><li>🔒 <strong>Renewals</strong> always start on the first day of the quarter — mid-quarter starts are not permitted for renewals. Continuing students may skip whole quarters and pay any future quarter.</li><li>❌ <strong>No compensatory sessions</strong> for missed training (except on sport injuries)</li><li>🔄 <strong>Batch change</strong> permitted at the start of a new quarter — fee is recalculated at the new batch rate</li><li>👕 <strong>Jersey is MANDATORY</strong> for new students. Old students may reuse existing jersey</li><li>👨‍👩‍👧‍👦 <strong>Sibling Discount:</strong> 5% off on coaching fee for second child</li><li>⚽ <strong>Matches</strong> conducted on weekends. Charges based on ground/overs. That will be communicated prior to match</li><li>💰 <strong>Fees are non-refundable and non-transferable</strong></li></ul><p style="margin-top:.5rem;font-size:.8rem">📞 <strong>+91-9606743437</strong> | 📧 <strong>ynsportsforexcellence@gmail.com</strong><br>📍 <strong>Varthur, Bangalore - 560087</strong></p><div class="consent-box"><label style="display:flex;align-items:flex-start;gap:.8rem;cursor:pointer;font-size:.9rem;color:#2d4a22;line-height:1.4;"><input type="checkbox" id="consent" required style="width:22px;height:22px;margin-top:3px;accent-color:#ff6f00;flex-shrink:0;"><span><strong>✅ I agree that, I read the medical & playing consent form provided in academy and agree to that. I also agree to all terms & conditions above.</strong></span></label></div></div>
             <button type="submit" class="btn" id="submitBtn">⚽ SUBMIT</button>
         </div></form>
     </div>
 </div>
 <script>
 /* =====================================================================
-   YNFA VARTHUR — engine v6
-   per-class + round-to-10 + skip-whole-quarters + start-date lock
+   YNFA VARTHUR — engine v7
+   per-class + round-to-10 + skip-quarters + HARD renewal date lock
    ===================================================================== */
-console.log('[YNFA] engine v6 · skip-quarters + start-date lock active');
+console.log('[YNFA] engine v7 · hard renewal date lock active');
 
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyHS5bAUsu7VFpvPS4gjGSIFrxCtWJKGLFn48uDY6ye4yXw0_MvZz2TaSeYiCOp3bvvOA/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbx2bNPJwenTWWDwq6TcVDXVBrW3TNTlk3Y4uiEahT7YEkyyVrRPJ3BgxnWNlsMbZM_HkA/exec';
 const ACADEMY_NAME = 'YNFA Varthur';
 const SIBLING_DISCOUNT = 0.05;
 
@@ -356,7 +356,6 @@ function rebuildQuarterOptions(paid) {
     const order = ['Q1','Q2','Q3'];
     const labels = { Q1:'Q1: Jun-Sep 2026', Q2:'Q2: Oct-Dec 2026', Q3:'Q3: Jan-Mar 2027' };
 
-    /* No renewal → all options */
     if (!RENEWAL) {
         const opts = [
             { v:'Q1',   t:labels.Q1 },
@@ -371,16 +370,14 @@ function rebuildQuarterOptions(paid) {
         return;
     }
 
-    /* Renewal — show every unpaid quarter whose index ≥ highest-paid index.
-       This allows skipping whole quarters upward and filling gaps downward. */
     const paidIdx = paid.map(function(k){ return order.indexOf(k); }).filter(function(i){ return i > -1; });
     const highestPaid = paidIdx.length ? Math.max.apply(null, paidIdx) : -1;
 
     const options = [];
     for (let i = 0; i < order.length; i++) {
         const k = order[i];
-        if (paid.indexOf(k) > -1) continue;      // already paid → hide
-        if (i < highestPaid) continue;           // behind the latest paid quarter → hide
+        if (paid.indexOf(k) > -1) continue;
+        if (i < highestPaid) continue;
         options.push({ v: k, t: labels[k] });
     }
     const remaining = ['Q1','Q2','Q3'].filter(function(k){ return paid.indexOf(k) === -1; });
@@ -596,7 +593,7 @@ function demoLookup() {
     demo.forEach(function(s){ FOUND[s.studentId] = s; });
     renderExisting(demo, false);
     document.getElementById('checkResult').insertAdjacentHTML('beforeend',
-        '<div class="jm" style="margin-top:.6rem">⚠️ DEMO — Q1 paid. Dropdown should show Q2, Q3, Full Season (skip allowed). Start date locked.</div>');
+        '<div class="jm" style="margin-top:.6rem">⚠️ DEMO — Q1 paid. Try renewing: start date should be locked to 01 Oct 2026 for Q2 (or 01 Jan 2027 for Q3).</div>');
 }
 
 function renderExisting(list, fromCache, meta) {
@@ -656,28 +653,19 @@ function startRenewal(id) {
     rebuildQuarterOptions(s.quartersPaid || []);
     document.getElementById('quarter').value = '';
 
-    /* Lock start date for continuing students */
+    /* HARD LOCK — renewals always start on the quarter's first day */
     const startEl = document.getElementById('startDate');
     const endEl   = document.getElementById('endDate');
-    const isContinuing = (s.quartersPaid || []).length > 0;
-
-    if (isContinuing) {
-        startEl.readOnly = true;
-        startEl.disabled = true;
-        startEl.style.background = '#eef2f7';
-        startEl.title = 'Start date is fixed for continuing students';
-    } else {
-        startEl.readOnly = false;
-        startEl.disabled = false;
-        startEl.style.background = '';
-        startEl.title = 'You can pick the start date for your first quarter this season';
-    }
+    startEl.readOnly = true;
+    startEl.disabled = true;
+    startEl.style.background = '#eef2f7';
+    startEl.title = 'Renewal start date is fixed to the quarter start';
     endEl.readOnly = true;
     endEl.style.background = '#f5f5f5';
 
     applyBatchUI(s.batchKey || '');
 
-    /* Pre-select the next chronological unpaid quarter */
+    /* Pre-select next chronological unpaid quarter & force its start date */
     if (!document.getElementById('quarter').disabled) {
         const paid = s.quartersPaid || [];
         const order = ['Q1','Q2','Q3'];
@@ -688,22 +676,18 @@ function startRenewal(id) {
         }
         if (defaultQ) {
             document.getElementById('quarter').value = defaultQ;
-            if (qd[defaultQ]) document.getElementById('startDate').value = qd[defaultQ].s;
+            if (qd[defaultQ]) startEl.value = qd[defaultQ].s;
         }
     }
 
     /* Banner */
     const bName = BATCH[s.batchKey] ? BATCH[s.batchKey].name : (s.batch || '—');
-    const dateNote = isContinuing
-        ? '🔒 <strong>Start date locked</strong> — you are a continuing student'
-        : '📅 <strong>Start date editable</strong> — first quarter this season';
-
     document.getElementById('renewalBanner').style.display = 'block';
     document.getElementById('renewalInfo').innerHTML =
         'Student: <strong>' + esc(s.studentName) + '</strong> (' + esc(s.studentId) + ')<br>' +
         'Current batch: <strong>' + esc(bName) + '</strong><br>' +
         'Quarters already paid: <strong>' + ((s.quartersPaid || []).join(', ') || '—') + '</strong><br>' +
-        dateNote + ' · Skip whole quarters allowed ✔ · Registration fee waived ✔ · Jersey optional ✔';
+        '🔒 <strong>Start date locked</strong> — renewals always start on the quarter start · Skip whole quarters allowed ✔ · Registration fee waived ✔ · Jersey optional ✔';
 
     document.getElementById('sid').value = s.studentId;
     document.getElementById('idDisplay').textContent = s.studentId;
@@ -755,11 +739,18 @@ function genQR(am, qt) {
     ul.appendChild(a);
 }
 
-/* ============ MAIN UPDATE ============ */
+/* ============ MAIN UPDATE (with hard renewal override) ============ */
 function updateAll() {
     const q  = document.getElementById('quarter').value;
     const b  = document.getElementById('batchType').value;
-    const sd = document.getElementById('startDate').value;
+
+    /* HARD RULE: for renewals, startDate is always the quarter's fixed start */
+    let sd = document.getElementById('startDate').value;
+    if (RENEWAL && q && qd[q]) {
+        sd = qd[q].s;
+        document.getElementById('startDate').value = sd;
+    }
+
     const os = document.getElementById('oldStudent').checked;
     const ej = document.getElementById('extraJersey').checked;
     const hs = document.getElementById('hasSibling').checked;
@@ -841,10 +832,8 @@ function updateLedger(r, jt, rf, gt, b, q, sd) {
     }
     if (q === 'full') note += 'Season discount of 5% already applied. ';
     if (RENEWAL && RENEWAL.batchKey && b && b !== RENEWAL.batchKey) note += 'Batch change: fee recalculated for the new batch. ';
-    if (RENEWAL && (RENEWAL.quartersPaid || []).length === 0) {
-        note += ' First quarter this season — start date editable.';
-    } else if (RENEWAL) {
-        note += ' Continuing student — start date fixed to the chosen quarter.';
+    if (RENEWAL) {
+        note += ' Renewal — start date fixed to the quarter.';
     } else if (sd) {
         const jd = new Date(sd); const x = qd[q];
         if (x) { const qs = new Date(x.s); if (jd >= qs && jd.getDate() <= 7) note += ' Joined within first 7 days — full month applied.'; }
@@ -889,7 +878,7 @@ function removeReceipt() {
     document.getElementById('uploadPH').style.display = 'block';
 }
 
-/* ============ SUBMIT ============ */
+/* ============ SUBMIT (with hard renewal date override) ============ */
 async function submitForm(e) {
     e.preventDefault();
     if (!cfgOk()) { alert('Backend not configured.'); return false; }
@@ -903,7 +892,10 @@ async function submitForm(e) {
     if (RENEWAL && (RENEWAL.quartersPaid || []).indexOf(q) > -1) { alert('This quarter is already paid.'); return false; }
 
     const b  = document.getElementById('batchType').value;
-    const sd = document.getElementById('startDate').value;
+    let sd = document.getElementById('startDate').value;
+    /* HARD RULE — override tampered date on renewal */
+    if (RENEWAL && q && qd[q]) sd = qd[q].s;
+
     if (!b)  { alert('Select a batch.'); return false; }
     if (!sd) { alert('Select a start date.'); return false; }
 
@@ -1061,7 +1053,8 @@ document.getElementById('quarter').addEventListener('change', function() {
     const key = this.value;
     if (key && qd[key]) {
         const startEl = document.getElementById('startDate');
-        if (startEl.disabled) startEl.value = qd[key].s;
+        /* Renewals always use fixed start; new students default to quarter start */
+        if (RENEWAL || startEl.disabled) startEl.value = qd[key].s;
         else if (!startEl.value) startEl.value = qd[key].s;
     }
     updateAll();
