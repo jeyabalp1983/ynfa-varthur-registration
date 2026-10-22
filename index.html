@@ -96,7 +96,7 @@
 <body>
 <div class="load" id="loading"><div class="spin"></div><p style="color:#ffd966;margin-top:1rem;font-weight:700">Processing...</p></div>
 <div class="main">
-    <div class="header"><div style="display:flex;align-items:center;gap:.8rem"><img class="hlogo" id="hlogo" src=""><span class="htitle">⚽ YNFA (VARTHUR)<span class="vtag">engine v7 · renewal-lock</span></span></div><div class="idbox" id="idDisplay">YNFAV------</div></div>
+    <div class="header"><div style="display:flex;align-items:center;gap:.8rem"><img class="hlogo" id="hlogo" src=""><span class="htitle">⚽ YNFA (VARTHUR)<span class="vtag">engine v8 · lock</span></span></div><div class="idbox" id="idDisplay">YNFAV------</div></div>
     <div class="formbox"><div class="flogo"><img id="flogo" src=""></div><h2>📋 REGISTRATION & PAYMENT - 2026-27</h2>
 
         <div class="ok" id="okMsg">
@@ -147,7 +147,13 @@
 
             <span class="sec">📅 QUARTER & DATES</span>
             <div class="inp"><label>Quarter <span class="req">*</span></label><select id="quarter" required></select></div>
-            <div class="r2"><div class="inp"><label>Start Date <span class="req">*</span></label><input type="date" id="startDate" required onchange="updateAll()"></div><div class="inp"><label>End Date</label><input type="text" id="endDate" readonly style="background:#f5f5f5;font-weight:600;color:#ff6f00"></div></div>
+            <div class="r2">
+                <div class="inp">
+                    <label>Start Date <span class="req">*</span> <span id="startDateHint" style="font-weight:400;color:#888;font-size:.7rem"></span></label>
+                    <input type="date" id="startDate" required readonly onchange="updateAll()">
+                </div>
+                <div class="inp"><label>End Date</label><input type="text" id="endDate" readonly style="background:#f5f5f5;font-weight:600;color:#ff6f00"></div>
+            </div>
 
             <span class="sec">⚽ BATCH SELECTION</span>
             <div class="inp">
@@ -213,12 +219,12 @@
 </div>
 <script>
 /* =====================================================================
-   YNFA VARTHUR — engine v7
-   per-class + round-to-10 + skip-quarters + HARD renewal date lock
+   YNFA VARTHUR — engine v8
+   per-class + round-to-10 + skip-quarters + BULLETPROOF renewal date lock
    ===================================================================== */
-console.log('[YNFA] engine v7 · hard renewal date lock active');
+console.log('[YNFA] engine v8 · bulletproof renewal date lock');
 
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbx2bNPJwenTWWDwq6TcVDXVBrW3TNTlk3Y4uiEahT7YEkyyVrRPJ3BgxnWNlsMbZM_HkA/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzCRi7lwF5uWU0yaUGNQmv-1zAh3MJU5tuTghzX74e6gnRNTO533hBu5gSIlpO6QdKD3Q/exec';
 const ACADEMY_NAME = 'YNFA Varthur';
 const SIBLING_DISCOUNT = 0.05;
 
@@ -269,6 +275,35 @@ function normMobile(s){ return String(s || '').replace(/\D/g, '').slice(-10); }
 function cfgOk(){ return SHEET_URL && SHEET_URL.indexOf('YOUR_APPS_SCRIPT_URL') === -1; }
 function fmt(n){ return '₹' + (Number(n)||0).toLocaleString('en-IN'); }
 function round10(n){ return Math.round((Number(n)||0) / 10) * 10; }
+
+/* =====================================================================
+   START DATE LOCK — persistent, cannot be re-enabled in renewal mode
+   ===================================================================== */
+function setStartDateLocked(locked) {
+    const el = document.getElementById('startDate');
+    const hint = document.getElementById('startDateHint');
+    el.readOnly = !!locked;
+    el.disabled = false;                                  /* keep enabled so the value submits */
+    el.style.pointerEvents = locked ? 'none' : '';
+    el.style.background = locked ? '#eef2f7' : '';
+    el.style.cursor = locked ? 'not-allowed' : '';
+    el.title = locked ? 'Renewal start date is fixed to the quarter start' : '';
+    el.setAttribute('aria-readonly', locked ? 'true' : 'false');
+    if (hint) {
+        hint.textContent = locked ? '🔒 Locked — renewals start on the quarter start' : '';
+        hint.style.color = locked ? '#c41e3a' : '#888';
+    }
+}
+
+/* Keep re-locking if anyone tampers while in renewal mode */
+setInterval(function(){
+    if (RENEWAL) {
+        const el = document.getElementById('startDate');
+        if (!el.readOnly || el.style.pointerEvents !== 'none') {
+            setStartDateLocked(true);
+        }
+    }
+}, 400);
 
 function getQuarterEndDate(q) {
     if (q === 'Q1')   return '2026-09-30';
@@ -349,7 +384,7 @@ function cf(q, b, sd, hs, paid) {
     return { f: net, e: end, gross: gross, seasonDisc: seasonDisc, sibDisc: sibDisc, classes: classes, rate: rate };
 }
 
-/* ============ QUARTER DROPDOWN — skip-whole-quarters allowed ============ */
+/* ============ QUARTER DROPDOWN ============ */
 function rebuildQuarterOptions(paid) {
     paid = paid || [];
     const sel = document.getElementById('quarter');
@@ -593,7 +628,7 @@ function demoLookup() {
     demo.forEach(function(s){ FOUND[s.studentId] = s; });
     renderExisting(demo, false);
     document.getElementById('checkResult').insertAdjacentHTML('beforeend',
-        '<div class="jm" style="margin-top:.6rem">⚠️ DEMO — Q1 paid. Try renewing: start date should be locked to 01 Oct 2026 for Q2 (or 01 Jan 2027 for Q3).</div>');
+        '<div class="jm" style="margin-top:.6rem">⚠️ DEMO — Q1 paid. Start date should be locked and non‑editable.</div>');
 }
 
 function renderExisting(list, fromCache, meta) {
@@ -653,15 +688,10 @@ function startRenewal(id) {
     rebuildQuarterOptions(s.quartersPaid || []);
     document.getElementById('quarter').value = '';
 
-    /* HARD LOCK — renewals always start on the quarter's first day */
-    const startEl = document.getElementById('startDate');
-    const endEl   = document.getElementById('endDate');
-    startEl.readOnly = true;
-    startEl.disabled = true;
-    startEl.style.background = '#eef2f7';
-    startEl.title = 'Renewal start date is fixed to the quarter start';
-    endEl.readOnly = true;
-    endEl.style.background = '#f5f5f5';
+    /* HARD LOCK — happens immediately and every interval tick */
+    setStartDateLocked(true);
+    document.getElementById('endDate').readOnly = true;
+    document.getElementById('endDate').style.background = '#f5f5f5';
 
     applyBatchUI(s.batchKey || '');
 
@@ -676,7 +706,7 @@ function startRenewal(id) {
         }
         if (defaultQ) {
             document.getElementById('quarter').value = defaultQ;
-            if (qd[defaultQ]) startEl.value = qd[defaultQ].s;
+            if (qd[defaultQ]) document.getElementById('startDate').value = qd[defaultQ].s;
         }
     }
 
@@ -710,10 +740,9 @@ function exitRenewal() {
     document.getElementById('idDisplay').textContent = 'YNFAV------';
     rebuildQuarterOptions([]);
 
-    const startEl = document.getElementById('startDate');
-    const endEl   = document.getElementById('endDate');
-    startEl.readOnly = false; startEl.disabled = false; startEl.style.background = ''; startEl.title = '';
-    endEl.readOnly = true; endEl.style.background = '#f5f5f5';
+    setStartDateLocked(false);
+    document.getElementById('endDate').readOnly = true;
+    document.getElementById('endDate').style.background = '#f5f5f5';
 
     applyBatchUI('');
     document.getElementById('paidDate').value = new Date().toISOString().split('T')[0];
@@ -739,16 +768,19 @@ function genQR(am, qt) {
     ul.appendChild(a);
 }
 
-/* ============ MAIN UPDATE (with hard renewal override) ============ */
+/* ============ MAIN UPDATE (forces value + lock every call) ============ */
 function updateAll() {
     const q  = document.getElementById('quarter').value;
     const b  = document.getElementById('batchType').value;
 
-    /* HARD RULE: for renewals, startDate is always the quarter's fixed start */
+    /* HARD RULE — renewals always start on the quarter start */
     let sd = document.getElementById('startDate').value;
-    if (RENEWAL && q && qd[q]) {
-        sd = qd[q].s;
-        document.getElementById('startDate').value = sd;
+    if (RENEWAL) {
+        setStartDateLocked(true);
+        if (q && qd[q]) {
+            sd = qd[q].s;
+            document.getElementById('startDate').value = sd;
+        }
     }
 
     const os = document.getElementById('oldStudent').checked;
@@ -832,9 +864,8 @@ function updateLedger(r, jt, rf, gt, b, q, sd) {
     }
     if (q === 'full') note += 'Season discount of 5% already applied. ';
     if (RENEWAL && RENEWAL.batchKey && b && b !== RENEWAL.batchKey) note += 'Batch change: fee recalculated for the new batch. ';
-    if (RENEWAL) {
-        note += ' Renewal — start date fixed to the quarter.';
-    } else if (sd) {
+    if (RENEWAL) note += ' Renewal — start date fixed to the quarter.';
+    else if (sd) {
         const jd = new Date(sd); const x = qd[q];
         if (x) { const qs = new Date(x.s); if (jd >= qs && jd.getDate() <= 7) note += ' Joined within first 7 days — full month applied.'; }
     }
@@ -878,7 +909,7 @@ function removeReceipt() {
     document.getElementById('uploadPH').style.display = 'block';
 }
 
-/* ============ SUBMIT (with hard renewal date override) ============ */
+/* ============ SUBMIT (ignores tampered startDate on renewal) ============ */
 async function submitForm(e) {
     e.preventDefault();
     if (!cfgOk()) { alert('Backend not configured.'); return false; }
@@ -893,8 +924,10 @@ async function submitForm(e) {
 
     const b  = document.getElementById('batchType').value;
     let sd = document.getElementById('startDate').value;
-    /* HARD RULE — override tampered date on renewal */
-    if (RENEWAL && q && qd[q]) sd = qd[q].s;
+    if (RENEWAL) {
+        sd = (q && qd[q]) ? qd[q].s : sd;
+        if (!sd) { alert('Renewal start date could not be determined.'); return false; }
+    }
 
     if (!b)  { alert('Select a batch.'); return false; }
     if (!sd) { alert('Select a start date.'); return false; }
@@ -1034,6 +1067,7 @@ window.onload = function() {
     rebuildQuarterOptions([]);
     document.getElementById('quarter').value = 'Q1';
     document.getElementById('startDate').value = qd.Q1.s;
+    setStartDateLocked(false);
     updateAll();
     togglePaymentFields();
     if (cfgOk() && WARM_ON_LOAD) {
@@ -1053,8 +1087,8 @@ document.getElementById('quarter').addEventListener('change', function() {
     const key = this.value;
     if (key && qd[key]) {
         const startEl = document.getElementById('startDate');
-        /* Renewals always use fixed start; new students default to quarter start */
-        if (RENEWAL || startEl.disabled) startEl.value = qd[key].s;
+        /* Renewals: always force quarter start. New students: only if empty. */
+        if (RENEWAL) startEl.value = qd[key].s;
         else if (!startEl.value) startEl.value = qd[key].s;
     }
     updateAll();
